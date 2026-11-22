@@ -13,16 +13,16 @@
 @media(max-width:879px){#menu{padding:18px}#guide{padding:15px}#menu h1 br{display:none}#menu h1 br:after{content:' '}}
 #flightScreen.landscape-game{position:fixed;top:0;left:0;overflow:hidden;transform-origin:top left;--edge:max(12px,env(safe-area-inset-left),env(safe-area-inset-right),env(safe-area-inset-top),env(safe-area-inset-bottom))}
 .landscape-game #touch{left:var(--edge);right:var(--edge);bottom:max(12px,env(safe-area-inset-bottom))}
+.landscape-game #pad{transform:scale(1.2);transform-origin:bottom left}
 .landscape-game #pause{right:var(--edge)}
 .landscape-game #menu{padding:12px var(--edge);display:block}
 .landscape-game #menu h1{font-size:38px}
 .landscape-game #guide{max-height:none}
 </style><div id="flightScreen"><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
-<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly your fighter over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><div class="row"><label id="fighterRow">Fighter <select id="fighterPick"><option>J-10CE</option><option value="MiG-29">MiG-29</option></select></label><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label></div><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
+<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Take the controls of the J-10CE. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><div class="row"><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label></div><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
 <summary class="guide-toggle">How to play</summary>
 <details name="guide-topic"><summary>Quick start</summary>
 <ol class="quick">
-<li><strong>Choose your fighter.</strong> Select the J-10CE or MiG-29 before launching your level.</li>
 <li><strong>Fly.</strong> <span id="firstSteer">Move the mouse to steer. Bring it back to the center to level out.</span></li>
 <li><strong>Find a contact.</strong> Follow the amber marker. If it leaves the screen, follow the turn and altitude cues.</li>
 <li><strong>Engage.</strong> <span id="firstFire">Hold left-click for the cannon. Keep the marked contact near the reticle until the lock ring fills, then right-click for a missile.</span></li>
@@ -90,14 +90,7 @@ void main(){if(M==8.){
   vec3 flame=mix(vec3(.35,.56,1.),vec3(.90,.40,.22),axial);
   flame=mix(flame,vec3(.83,.85,1.),cells*.60);
   o=vec4(flame,(1.-axial)*(.20+.30*cells));return;
-}vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0.):vec3(0.))),v=normalize(eye-w),s=sun(),r=reflect(-v,n);float nv=abs(dot(n,v)),rough=M==2.?.12:M==1.?.32:.7,fr=pow(1.-nv,5.);vec3 base=C;
-if(M==9.){
-  vec2 uv=vec2(L.x+.29*L.y,L.z-.61*L.y);
-  float band=sin(uv.y*1.44+uv.x*.58+4.1*noise(uv*.42));
-  base=mix(vec3(.16,.61,.65),vec3(.07,.35,.55),smoothstep(-.43,-.37,band));
-  base=mix(base,vec3(.038,.12,.28),smoothstep(.73,.79,band));
-}
-vec3 c=base*(.43+.83*max(dot(n,s),0.)+.14*n.y)+sky(r)*(.035+fr*.14)+vec3(pow(max(dot(reflect(-s,n),v),0.),2./(rough*rough)))*(.12+.55*(1.-rough));if(M==2.)c=mix(c,sky(r),.38+.45*fr);if(M==3.)c=C*2.;if(M==5.||M==7.){
+}vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0.):vec3(0.))),v=normalize(eye-w),s=sun(),r=reflect(-v,n);float nv=abs(dot(n,v)),rough=M==2.?.12:M==1.?.32:.7,fr=pow(1.-nv,5.);vec3 c=C*(.43+.83*max(dot(n,s),0.)+.14*n.y)+sky(r)*(.035+fr*.14)+vec3(pow(max(dot(reflect(-s,n),v),0.),2./(rough*rough)))*(.12+.55*(1.-rough));if(M==2.)c=mix(c,sky(r),.38+.45*fr);if(M==3.)c=C*2.;if(M==5.||M==7.){
   vec2 uv=vec2(w.x+.55*w.z,w.y-.45*w.z);
   float clusters=noise(uv*1.15)*.65+noise(uv*3.)*.35;
   float rim=abs(dot(n,v)),detail=1.-smoothstep(240.,650.,distance(w,eye));
@@ -144,35 +137,8 @@ plate([[i*1.22,.155,-2.9],[i*4.10,-.005,-3.0],[i*3.84,.005,-2.77]],dark,.012)}
 for(let x of twin||raf?[-.64,.64]:[0]){hull([[-6.46,.01,.53,.52],[-5.88,.01,.63,.63],[-4.2,.02,.66,.66]],metal,1,x);hull([[-6.48,.01,.44,.44],[-6.47,.01,.01,.01]],hot,3,x);if(!raf||x<0)fin(twin?x*1.44:0,twin?2.65:3.0,-4.38,player)}
 if(player){const glyphs=['111101101101111','010110010010111','111001111100111'];for(let side of [-1,1])glyphs.forEach((g,j)=>{for(let k=0;k<15;k++)if(g[k]==='1'){let z=-4.83+(j*4+k%3)*.067*side,y=1.54-Math.floor(k/3)*.068,x=side*.069;let a=[x,y,z],b=[x,y,z+side*.060],c=[x,y-.060,z+side*.060],d=[x,y-.060,z];tri(a,b,c,dark);tri(a,c,d,dark)}})}
 for(let x of player?[0]:[-.8,.8]){hull([[-2,-.43,.6,.42],[1.68,-.50,.67,.43],[2.57,-.48,.68,.42]],col,1,x);hull([[2.57,-.48,.60,.35],[2.59,-.48,.01,.01]],dark,0,x)}}
-function buildFulcrum(){
-  hull([[-5.8,.05,.38,.32],[-3,.17,1,.65],[0,.20,1.05,.76],[2.7,.18,.81,.72],[4.85,.12,.57,.48]],paint,9);
-  hull([[4.85,.12,.57,.48],[5.8,.12,.42,.37],[7.25,.10,.02,.02]],dark,0);
-  for(const side of [-1,1]){
-    const engineX=side*.87;
-    hull([[-6.05,-.16,.55,.53],[-4.1,-.08,.66,.67],[-1,-.10,.78,.66],[1.9,-.17,.60,.48]],paint,9,engineX);
-    hull([[1.9,-.17,.56,.45],[1.92,-.17,.01,.01]],dark,0,engineX);
-    hull([[-6.47,-.16,.47,.45],[-6.03,-.16,.56,.54]],metal,0,engineX);
-    hull([[-6.48,-.16,.02,.02],[-6.47,-.16,.43,.41]],hot,3,engineX);
-    const start=verts.length;
-    const surface=(points)=>plate(points.map(([x,y,z])=>[x*side,y,z]),paint,.10);
-    surface([[.59,.22,3.65],[1.65,.17,1.05],[5.55,.17,-2.27],[5.24,.17,-3.50],[.69,.17,-3.18]]);
-    surface([[.76,.12,-3.62],[2.96,.12,-5.44],[2.76,.12,-6.42],[.78,.12,-5.77]]);
-    fin(engineX*1.20,2.67,-4.05,false);
-    for(let i=start+9;i<verts.length;i+=10)if(verts[i]===1)verts[i]=9;
-    for(const [radius,y,color] of [[.36,.282,[.025,.33,.19]],[.165,.286,[.79,.055,.10]]]){
-      const cx=side*4.34,cz=-2.40;
-      for(let j=0;j<24;j++){
-        const rim=k=>[cx+radius*Math.cos(k*TAU/24),y,cz+radius*Math.sin(k*TAU/24)];
-        tri([cx,y,cz],rim(j+1),rim(j),color);
-      }
-    }
-  }
-  hull([[.85,.79,.02,.03],[1.53,.85,.52,.39],[2.60,.87,.54,.49],[3.54,.81,.46,.39],[4.45,.61,.05,.04]],glass,2);
-  hull([[2.55,.87,.55,.50],[2.64,.87,.55,.50]],dark,0);
-}
 function box(x,y,z,dx,dy,dz,col){let p=(a,b,c)=>[x+a*dx,y+b*dy,z+c*dz];let v=[p(-1,-1,-1),p(1,-1,-1),p(1,1,-1),p(-1,1,-1),p(-1,-1,1),p(1,-1,1),p(1,1,1),p(-1,1,1)];for(let [a,b,c,d] of [[0,3,2,1],[4,5,6,7],[0,4,7,3],[1,2,6,5],[3,7,6,2],[0,1,5,4]]){tri(v[a],v[b],v[c],col);tri(v[a],v[c],v[d],col)}}
 const models={};for(let s of ['J-10CE','Rafale','Su-30'])models[s]=mesh(()=>jet(s));models['J-10C']=models['J-10CE'];
-models['MiG-29']=mesh(buildFulcrum);
 models.gull=mesh(()=>{
   hull([[-.56,0,.02,.02],[-.12,.04,.13,.11],[.34,.06,.10,.10],[.49,.05,.02,.025]],[.73,.77,.75],0,0,8);
   for(const side of [-1,1]){
@@ -211,7 +177,7 @@ function height(x,z,is){
 function ground(x,z){let h=0;for(const is of islands)h=Math.max(h,height(x,z,is));return h}
 function surfaceNormal(x,z,is){let d=2;return unit([height(x-d,z,is)-height(x+d,z,is),2*d,height(x,z-d,is)-height(x,z+d,is)])}
 const terrainTiles=islands.map(is=>mesh(()=>{
-  const [cx,cz,rx,rz]=is,N=92,grid=[];
+  const [cx,cz,rx,rz]=is,N=Math.min(84,Math.max(44,Math.ceil(Math.max(rx,rz)/10))),grid=[];
   for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){
     const x=cx+(i/N-.5)*2.62*rx,z=cz+(j/N-.5)*2.62*rz;
     grid.push({p:[x,height(x,z,is),z],n:surfaceNormal(x,z,is)});
@@ -261,18 +227,6 @@ function canopy(x,y,z,h){
     for(let row=0;row<3;row++)for(let k=0;k<6;k++){let a=rings[row][k],b=rings[row][(k+1)%6],c=rings[row+1][(k+1)%6],d=rings[row+1][k];facet(a,b,c);facet(a,c,d)}
   }
 }
-const groves=islands.map(is=>mesh(()=>{
-  const [cx,cz,rx,rz]=is;
-  for(let i=0;i<Math.min(280,Math.ceil(rx*rz/210));i++){
-    const gx=cx+(sample()*2-1)*rx,gz=cz+(sample()*2-1)*rz;
-    for(let k=0;k<5;k++){
-      const x=gx+(sample()-.5)*35,z=gz+(sample()-.5)*35,y=height(x,z,is);
-      if(y<2.5||Math.hypot(cx-x,cz-z)<22||surfaceNormal(x,z,is)[1]<.80)continue;
-      if(y<9&&k<2)palm(x,y-.38,z,8+sample()*8);
-      if(y>=9&&k<3)canopy(x,y-.35,z,7+sample()*9);
-    }
-  }
-}));
 // Reuse three plant meshes so dense groves do not duplicate geometry.
 const plants=[mesh(()=>palm(0,0,0,1)),mesh(()=>canopy(0,0,0,1)),mesh(()=>{
   for(let i=0;i<10;i++){
@@ -281,8 +235,27 @@ const plants=[mesh(()=>palm(0,0,0,1)),mesh(()=>canopy(0,0,0,1)),mesh(()=>{
     for(let sign of [-1,1]){const edge=add(ridge,add(mul(across,.145*sign),[0,-.12,0]));const col=sign>0?[.12,.33,.057]:[.039,.19,.065];tri([0,0,0],ridge,edge,col,7);tri(edge,ridge,tip,col,7)}
   }
 })];
+// At a distance the crown and silhouette carry more detail than individual leaflets.
+const distantPlants=[mesh(()=>{
+  trunk([0,0,0],[.10,.95,0],.032,.016);
+  for(let i=0;i<7;i++){
+    const angle=i*TAU/7,dx=Math.cos(angle),dz=Math.sin(angle);
+    const root=[.10,.95,0],tip=[.10+.56*dx,.78,.56*dz];
+    const left=[.10+.29*dx-.085*dz,1.04,.29*dz+.085*dx];
+    const right=[.10+.29*dx+.085*dz,1.04,.29*dz-.085*dx];
+    tri(root,left,right,[.15,.34,.07],7,[up,up,up]);
+    tri(left,tip,right,[.095,.28,.07],7,[up,up,up]);
+  }
+}),mesh(()=>{
+  for(let i=0;i<7;i++){
+    const edge=k=>[.46*Math.cos(k*TAU/7),.64+.05*Math.sin(k*TAU/7),.44*Math.sin(k*TAU/7)];
+    const a=edge(i),b=edge(i+1);
+    tri(a,[.06,1.03,.03],b,[.095,.24,.06],5);
+    tri(b,[0,.20,0],a,[.064,.18,.043],5);
+  }
+})];
 const jungle=islands.map(is=>{
-  const [cx,cz,rx,rz]=is,groups=[[],[],[]];
+  const [cx,cz,rx,rz]=is,cells=new Map();
   for(let i=0;i<Math.min(1600,Math.ceil(rx*rz/48));i++){
     const gx=cx+(sample()*2-1)*rx,gz=cz+(sample()*2-1)*rz;
     for(let j=0;j<4;j++){
@@ -290,18 +263,43 @@ const jungle=islands.map(is=>{
       if(y<2.6||Math.hypot(x-cx,z-cz)<24||surfaceNormal(x,z,is)[1]<.73)continue;
       let type=y<11||sample()<.17?0:1;
       if(j===3)type=2;
-      groups[type].push(x,y-.38,z,type===0?10+sample()*11:type===1?10+sample()*12:3+sample()*3);
+      const col=Math.floor(x/256),row=Math.floor(z/256),key=col+','+row;
+      let cell=cells.get(key);
+      if(!cell){cell={x:(col+.5)*256,z:(row+.5)*256,minY:y,maxY:y,groups:[[],[],[]]};cells.set(key,cell)}
+      cell.minY=Math.min(cell.minY,y);cell.maxY=Math.max(cell.maxY,y);
+      cell.groups[type].push(x,y-.38,z,type===0?10+sample()*11:type===1?10+sample()*12:3+sample()*3);
     }
   }
-  return groups.map(data=>{let buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW);return {buffer,count:data.length/4}})
+  return Array.from(cells.values(),cell=>{
+    cell.groups=cell.groups.map(data=>{
+      if(!data.length)return null;
+      const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW);
+      return {buffer,count:data.length/4};
+    });
+    return cell;
+  });
 });
-function drawJungle(index,depth){
+function drawJungle(index){
   gl.uniform1i(mu.planted,1);gl.uniform3fv(mu.pos,[0,0,0]);gl.uniform3fv(mu.scale,[1,1,1]);gl.uniformMatrix3fv(mu.rot,false,identity.flat());
-  jungle[index].forEach(({buffer,count},type)=>{
-    if(type===2&&depth>800)return;
-    gl.bindVertexArray(plants[type].vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.enableVertexAttribArray(4);gl.vertexAttribPointer(4,4,gl.FLOAT,false,16,0);gl.vertexAttribDivisor(4,1);
-    gl.drawArraysInstanced(gl.TRIANGLES,0,plants[type].count,Math.ceil(count*[.36,.63,1][quality]));
-  });gl.uniform1i(mu.planted,0);
+  for(const cell of jungle[index]){
+    const y=(cell.minY+cell.maxY)/2+10;
+    const [x,v,z]=coords([cell.x,y,cell.z]);
+    const radius=Math.hypot(192,(cell.maxY-cell.minY)/2+18);
+    if(z < -radius || Math.abs(x)>z*zoom[0]+radius*Math.hypot(1,zoom[0]) || Math.abs(v)>z*zoom[1]+radius*Math.hypot(1,zoom[1]))continue;
+    const distance=Math.hypot(x,v,z);
+    if(distance>[1250,1900,2900][quality]+radius)continue;
+    const near=distance<[170,255,390][quality];
+    cell.groups.forEach((group,type)=>{
+      if(!group || (type===2&&!near))return;
+      const model=near?plants[type]:distantPlants[type];
+      const density=[.32,.56,.88][quality]*(near?1:clamp(600/distance,.32,1));
+      gl.bindVertexArray(model.vao);gl.bindBuffer(gl.ARRAY_BUFFER,group.buffer);
+      gl.enableVertexAttribArray(4);gl.vertexAttribPointer(4,4,gl.FLOAT,false,16,0);gl.vertexAttribDivisor(4,1);
+      gl.drawArraysInstanced(gl.TRIANGLES,0,model.count,Math.ceil(group.count*density));
+    });
+  }
+  gl.uniform1i(mu.planted,0);
 }
 function boatMesh(ferry){
   const side=ferry?[.033,.14,.20]:[.04,.25,.22],deck=[.42,.29,.16],cream=[.84,.78,.57];
@@ -339,7 +337,7 @@ function drawIslands(){
     const [side,vertical,depth]=coords([x,h*.4,z]);
     if(depth < -r || Math.abs(side)>Math.max(depth,0)*zoom[0]+r*(1+zoom[0]) || Math.abs(vertical)>Math.max(depth,0)*zoom[1]+r*(1+zoom[1]))continue;
     draw(terrainTiles[i],[0,0,0]);
-    if(depth-r<[1400,2300,3300][quality]){draw(groves[i],[0,0,0]);drawJungle(i,depth-r)}
+    if(depth-r<[1400,2300,3300][quality])drawJungle(i);
   }
 }
 const stages=[['Fighter patrol',['Rafale','Su-30']],['Support flight',['Helicopter','Drone']],['Island installations',['Radar','Battery']]],cameras=['Chase','Close chase','Cockpit','Target','Missile'],identity=frame(0,0,0),keys=new Set(),pool=Array.from({length:220},()=>({life:0}));let state='brief',stage=0,enemies=[],target=0,lock=0,score=0,elapsed=0,camMode=0,radar=1,message='',msgTime=0,t=0,shake=0,nextWave=0,shots=0,kills=0,weapon='GUN',res=1,last=0,eye=[0,0,0],axes=identity,zoom=[1,1],orbit=[0,0],drag=null,stick=[0,0],audio,master,engine,wind,muted=false,quality=1,W=1,H=1,lastWarn=0;
@@ -466,17 +464,14 @@ try{
   finished=unlocked===campaign.length&&saved?.finished===true;
 }catch{}
 level=unlocked;
-let fighter='J-10CE';
-$('fighterPick').onchange=()=>{fighter=$('fighterPick').value==='MiG-29'?'MiG-29':'J-10CE'};
 function showPicker(selected){
-  $('fighterRow').hidden=false;
   $('levelRow').hidden=false;
   $('levelPick').innerHTML=campaign.map((entry,i)=>'<option value="'+(i+1)+'" '+(i+1>unlocked?'disabled':'')+'>'+ (i+1)+' · '+entry.name+(i+1>unlocked?' (locked)':'')+'</option>').join('');
   $('levelPick').value=String(selected);
 }
 function briefing(n){
   const entry=campaign[n-1],total=6+entry.extra.reduce((s,wave)=>s+wave.length,0);
-  return entry.name+' · '+total+' contacts across three phases. Intercept the fighters, clear the support flight, then secure the island installations.';
+  return 'Take the controls of the J-10CE. '+entry.name+' · '+total+' contacts across three phases. Intercept the fighters, clear the support flight, then secure the island installations.';
 }
 function updateBrief(){const n=Number($('levelPick').value);$('brief').textContent=briefing(n);$('launch').textContent='Launch Level '+n+'　→'}
 showPicker(level);updateBrief();if(finished)$('kicker').textContent='CAMPAIGN COMPLETE　 /　 LEVEL REPLAY';
@@ -491,7 +486,7 @@ function spawn(){enemies=stages[stage][1].concat(campaign[level-1].extra[stage])
 let cameraAnchor=null,chaseRoll=0;
 function reset(){lastWarn=0;nearestThreat=Infinity;pointerFlight=null;cameraAnchor=null;chaseRoll=0;player={p:[0,175,0],h:0,pitch:0,b:0,pv:0,bv:0,yv:0,speed:76,burner:0,hp:100,repairFrom:0,repairBase:100,ammo:120,missiles:6,gunCd:0,msCd:0,flareReadyAt:0,rearm:0};wingman=[-42,184,20];stage=score=elapsed=kills=shots=camMode=shake=0;orbit=[0,0];for(let p of pool)p.life=0;spawn();eye=add(player.p,[0,5,-22]);axes=identity;keys.clear();stick=[0,0]}
 function notify(s){message=s;msgTime=3}
-function overlay(s){if(s!=='play')for(const voice of voices)voice.stop();pointerFlight=null;mouseGun=false;drag=null;state=s;keys.clear();stick=[0,0];$('nub').style.transform='';$('menu').hidden=s==='play';$('pause').hidden=s!=='play';$('touch').hidden=!mobile||s!=='play';$('restart').hidden=s!=='paused';$('levelRow').hidden=true;$('fighterRow').hidden=true;
+function overlay(s){if(s!=='play')for(const voice of voices)voice.stop();pointerFlight=null;mouseGun=false;drag=null;state=s;keys.clear();stick=[0,0];$('nub').style.transform='';$('menu').hidden=s==='play';$('pause').hidden=s!=='play';$('touch').hidden=!mobile||s!=='play';$('restart').hidden=s!=='paused';$('levelRow').hidden=true;
 if(s!=='play'){
   const win=s==='win',paused=s==='paused',lastLevel=level===campaign.length;
   $('title').textContent=paused?'On hold':win?(lastLevel?'Campaign complete':'Level '+level+' clear'):'Sortie ended';
@@ -560,7 +555,7 @@ function releaseFlares(){
 function action(code){if(code==='Escape'){if(state==='play')overlay('paused');else if(state==='paused')start();return}if(state!=='play')return;if(code==='KeyF')launchMissile();if(code==='KeyX')releaseFlares();if(code==='KeyR')cycle();if(code==='KeyC'){camMode=(camMode+1)%5;notify(cameras[camMode]+' view')}if(code==='Tab')radar=(radar+1)%3}
 window.onkeydown=e=>{if(state==='play'||e.code==='Escape'){e.preventDefault();if(!e.repeat)action(e.code);keys.add(e.code)}};window.onkeyup=e=>keys.delete(e.code);
 for(let btn of document.querySelectorAll('[data-key]')){btn.onpointerdown=e=>{e.preventDefault();btn.setPointerCapture(e.pointerId);keys.add(btn.dataset.key);action(btn.dataset.key)};btn.onlostpointercapture=()=>keys.delete(btn.dataset.key)}
-const pad=$('pad');function steer(e){let b=pad.getBoundingClientRect(),x=(e.clientX-b.left-b.width/2)/40,y=(e.clientY-b.top-b.height/2)/40;if(quarterTurn)[x,y]=[y,-x];let radius=Math.hypot(x,y),travel=clamp((radius-.10)/.90,0,1);
+const pad=$('pad');function steer(e){let b=pad.getBoundingClientRect(),range=landscapeGame?40*b.width/102:40,x=(e.clientX-b.left-b.width/2)/range,y=(e.clientY-b.top-b.height/2)/range;if(quarterTurn)[x,y]=[y,-x];let radius=Math.hypot(x,y),travel=clamp((radius-.10)/.90,0,1);
 let gain=travel*(.58+.42*travel)/(radius||1);stick=[x*gain,y*gain];$('nub').style.transform='translate('+stick[0]*30+'px,'+stick[1]*30+'px)'}pad.onpointerdown=e=>{pointerFlight=null;pad.setPointerCapture(e.pointerId);steer(e)};pad.onpointermove=e=>{if(pad.hasPointerCapture(e.pointerId))steer(e)};pad.onlostpointercapture=()=>{stick=[0,0];$('nub').style.transform=''};
 let mouseGun=false,pointerFlight=null;
 function pointerAxis(offset,halfSize){
@@ -704,7 +699,7 @@ function resize(){
     flightScreen.style.height=H+'px';
     flightScreen.style.transform=rotate?'translateX('+H+'px) rotate(90deg)':'none';
   }
-  let px=Math.min(devicePixelRatio,[1,1.4,1.8][quality])*res;scene.width=Math.max(1,Math.round(W*px));scene.height=Math.max(1,Math.round(H*px));let ratio=Math.min(devicePixelRatio,2);hud.width=W*ratio;hud.height=H*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);zoom=[.60*W/H,.60]}window.addEventListener('resize',resize);if(phoneDisplay)window.visualViewport?.addEventListener('resize',resize);resize();
+  let px=Math.min(devicePixelRatio,(phoneDisplay?[1,1,1.4]:[1,1.4,1.8])[quality])*res;scene.width=Math.max(1,Math.round(W*px));scene.height=Math.max(1,Math.round(H*px));let ratio=Math.min(devicePixelRatio,2);hud.width=W*ratio;hud.height=H*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);zoom=[.60*W/H,.60]}window.addEventListener('resize',resize);if(phoneDisplay)window.visualViewport?.addEventListener('resize',resize);resize();
 function camera(dt){let a=player,p=a.p,basis=frame(a.h,a.pitch,a.b),f=basis[2],to,at,roll=0;
 if(state==='brief'){let angle=1.96+.14*Math.sin(t*.16),d=W<H?24:18;to=add(p,[Math.sin(angle)*d,5.0,Math.cos(angle)*d]);let dir=unit(sub(p,to)),right=unit(cross(up,dir));at=add(p,mul(right,W<H?0:-4));if(W<H)at[1]-=3.8}
 else{if(!drag){orbit[0]*=Math.exp(-dt*3);orbit[1]*=Math.exp(-dt*3)}let view=frame(a.h+orbit[0],a.pitch-orbit[1],0)[2],distance=(camMode===1?14:22)+3*a.burner;to=add(add(p,mul(view,-distance)),mul(up,camMode===1?3.7:6));at=add(p,mul(f,22));chaseRoll+=(a.b*.23-chaseRoll)*(1-Math.exp(-dt*5));roll=chaseRoll;if(camMode===2){to=add(add(p,mul(f,3)),mul(basis[1],1.85));at=add(to,mul(f,60));roll=a.b}if(camMode===3&&active()){let d=unit(sub(active().p,p));to=add(add(p,mul(d,-19)),[0,6,0]);at=active().p}if(camMode===4){let m=pool.find(o=>o.kind==='missile'&&o.life>0);if(m){to=add(add(m.p,mul(unit(m.vel),-12)),[0,3,0]);at=add(m.p,m.vel)}}}
@@ -758,17 +753,13 @@ function drawBirds(){
 function render(){gl.viewport(0,0,scene.width,scene.height);gl.disable(gl.DEPTH_TEST);gl.clear(gl.DEPTH_BUFFER_BIT);gl.useProgram(skyP);shared(su);gl.bindVertexArray(null);gl.drawArrays(gl.TRIANGLES,0,3);gl.enable(gl.DEPTH_TEST);gl.useProgram(meshP);shared(mu);drawIslands();drawBoats();drawBirds();
 let a=player,b=frame(a.h,a.pitch,a.b);
 if(camMode!==2||state==='brief'){
-  draw(models[fighter],a.p,b);
-  const twinEngine=fighter==='MiG-29';
-  for(const x of twinEngine?[-.87,.87]:[0]){
-  const origin=twinEngine?add(add(a.p,mul(b[0],x)),mul(b[1],-.16)):a.p;
-  draw(models.spark,add(origin,mul(b[2],-6.6)),b,[.39,.39,.49+.035*Math.sin(t*47)]);
+  draw(models['J-10CE'],a.p,b);
+  draw(models.spark,add(a.p,mul(b[2],-6.6)),b,[.39,.39,.49+.035*Math.sin(t*47)]);
   if(a.burner>.015){
     const glow=a.burner,reach=glow*(1+.035*Math.sin(t*38));
     gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.depthMask(false);
-    draw(models.exhaust,add(origin,mul(b[2],-6.49)),b,[.7+.3*glow,.7+.3*glow,reach]);
+    draw(models.exhaust,add(a.p,mul(b[2],-6.49)),b,[.7+.3*glow,.7+.3*glow,reach]);
     gl.depthMask(true);gl.disable(gl.BLEND);
-  }
   }
 }
 if(state==='brief')return;draw(models['J-10CE'],wingman,b);for(let e of enemies){if(e.hp<=0)continue;let [x,y,z]=coords(e.p);if(z< -12||Math.abs(x)>Math.max(0,z)*zoom[0]+16||Math.abs(y)>Math.max(0,z)*zoom[1]+16)continue;
@@ -799,7 +790,7 @@ function healthBar(x,y,w,h,hp,maximum){
   ctx.fillStyle=remaining>.6?'#86e8ac':remaining>.3?'#ffcf72':'#ff7f71';ctx.fillRect(x,y,w*remaining,h);
 }
 function drawHud(){ctx.clearRect(0,0,W,H);if(state!=='play')return;ctx.save();ctx.shadowColor='#061d21';ctx.shadowBlur=3;ctx.lineWidth=1.3;ctx.strokeStyle=green;let a=player,mx=W/2,my=H/2,small=W<710,heading=(Math.round(a.h*180/PI)+360)%360;
-text2('LEVEL '+level+'/'+campaign.length+'   /   '+fighter,16,25,'#ecfff1');text2((stage+1)+'/3  '+stages[stage][0],16,44);text2('HULL '+a.hp+'%    '+score+' PTS',16,62);healthBar(16,68,112,5,a.hp,100);if(a.hp<100&&elapsed>=a.repairFrom)text2('REPAIRING',134,73,green,'left',10);let compassY=small?86:28;text2(String(heading).padStart(3,'0')+'°',mx,compassY,green,'center');for(let i=-4;i<=4;i++)if(i)line(mx+i*15,compassY-5,mx+i*15,compassY-(i%2?9:13));
+text2('LEVEL '+level+'/'+campaign.length+'   /   J-10CE',16,25,'#ecfff1');text2((stage+1)+'/3  '+stages[stage][0],16,44);text2('HULL '+a.hp+'%    '+score+' PTS',16,62);healthBar(16,68,112,5,a.hp,100);if(a.hp<100&&elapsed>=a.repairFrom)text2('REPAIRING',134,73,green,'left',10);let compassY=small?86:28;text2(String(heading).padStart(3,'0')+'°',mx,compassY,green,'center');for(let i=-4;i<=4;i++)if(i)line(mx+i*15,compassY-5,mx+i*15,compassY-(i%2?9:13));
 let selectedContact=active();
 if(selectedContact){
   const cue=navCue(a.p,a.h,selectedContact.p);
@@ -822,7 +813,7 @@ if(radar){let r=radar===2?Math.min(103,W*.21,H*.19):small?39:59,cx=W-r-17,cy=bot
 let warning=Number.isFinite(nearestThreat);let ahead=add(a.p,mul(frame(a.h,a.pitch,0)[2],a.speed*2.2));
 let terrainWarning=Math.min(a.p[1]-ground(a.p[0],a.p[2]),ahead[1]-ground(ahead[0],ahead[2]))<22;
 if(terrainWarning||warning||msgTime>0||lock===1){let label=terrainWarning?'LOW TERRAIN CLEARANCE · CLIMB':warning?'MISSILE INBOUND':msgTime>0?message: 'LOCKED · RIGHT CLICK / F';text2(label,mx,H*(small?.30:.22),warning?'#ffb18b':amber,'center',small?11:14)}if(camMode===2){ctx.strokeStyle='#1e3037';ctx.lineWidth=10;ctx.beginPath();ctx.ellipse(mx,H*.73,W*.55,H*.71,0,PI,TAU);ctx.stroke()}ctx.restore()}
-let slow=0,fast=0;function tick(now){let raw=last?(now-last)/1000:.016;last=now;let dt=Math.min(.12,raw);if(state==='brief'||state==='play')t+=dt;if(state==='play'){let steps=Math.ceil(dt/.018);for(let i=0;i<steps&&state==='play';i++)update(dt/steps);if(raw>.038){slow++;fast=0}else{fast++;slow=Math.max(0,slow-1)}if(slow>28&&res>.55){res=Math.max(.55,res-.12);resize();slow=0}if(fast>240&&res<1){res=Math.min(1,res+.08);resize();fast=0}}
+let slow=0,fast=0;function tick(now){let raw=last?(now-last)/1000:.016;last=now;let dt=Math.min(.12,raw);if(state==='brief'||state==='play')t+=dt;if(state==='play'){let steps=Math.ceil(dt/.018);for(let i=0;i<steps&&state==='play';i++)update(dt/steps);if(raw>.024){slow++;fast=0}else{fast=raw<.019?fast+1:0;slow=Math.max(0,slow-1)}if(slow>28&&res>.55){res=Math.max(.55,res-.12);resize();slow=0}if(fast>240&&res<1){res=Math.min(1,res+.08);resize();fast=0}}
 if(state==='brief'||state==='play'){camera(dt);render()}drawHud();requestAnimationFrame(tick)}
 if(mobile){$('firstSteer').textContent='Move the left stick to steer. Release it to level out.';$('firstFire').textContent='Hold Gun for cannon fire. Keep the marked contact near the reticle until the lock ring fills, then tap Missile.'}
 reset();requestAnimationFrame(tick)

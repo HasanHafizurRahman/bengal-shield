@@ -11,7 +11,13 @@
 #guide p{margin:4px 0 12px;font-size:14px}
 @media(min-width:880px){#menu{display:grid;grid-template-columns:minmax(290px,1fr) minmax(410px,500px);align-items:center;gap:5vw}#guide{max-height:83vh;overflow:auto;scrollbar-color:#638375 #122a30}}
 @media(max-width:879px){#menu{padding:18px}#guide{padding:15px}#menu h1 br{display:none}#menu h1 br:after{content:' '}}
-</style><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
+#flightScreen.landscape-game{position:fixed;top:0;left:0;overflow:hidden;transform-origin:top left;--edge:max(12px,env(safe-area-inset-left),env(safe-area-inset-right),env(safe-area-inset-top),env(safe-area-inset-bottom))}
+.landscape-game #touch{left:var(--edge);right:var(--edge);bottom:max(12px,env(safe-area-inset-bottom))}
+.landscape-game #pause{right:var(--edge)}
+.landscape-game #menu{padding:12px var(--edge);display:block}
+.landscape-game #menu h1{font-size:38px}
+.landscape-game #guide{max-height:none}
+</style><div id="flightScreen"><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
 <section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly your fighter over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><div class="row"><label id="fighterRow">Fighter <select id="fighterPick"><option>J-10CE</option><option value="MiG-29">MiG-29</option></select></label><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label></div><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
 <summary class="guide-toggle">How to play</summary>
 <details name="guide-topic"><summary>Quick start</summary>
@@ -34,11 +40,11 @@
 <dt>C / Middle drag</dt><dd>C cycles chase, close chase, cockpit, target, and missile views. Hold the middle mouse button and drag to look around in chase view.</dd>
 <dt>Esc / Ⅱ</dt><dd>Pause to read this guide, adjust settings, restart the level, or resume.</dd>
 </dl></details>
-<details name="guide-topic" id="touchHelp"><summary>Touch controls</summary><p>Push the left stick up to climb, down to descend, or sideways to turn. Release to level out. Hold <b>Boost</b> to accelerate to 2,170 km/h or <b>Gun</b> to fire. Tap <b>Target</b> to select a contact and <b>Missile</b> once the lock ring fills.</p><p>Tap <b>Flare</b> during an incoming warning to divert one missile. Tap <b>View</b> to switch cameras, <b>Radar</b> to change radar size or hide it, and <b>Ⅱ</b> to pause. Drag on open sky to look around in chase view.</p></details>
+<details name="guide-topic" id="touchHelp"><summary>Touch controls</summary><p>Tap Launch to enter landscape play. If your browser keeps its toolbar visible, the game still fills the available space.</p><p>Push the left stick up to climb, down to descend, or sideways to turn. Release to level out. Hold <b>Boost</b> to accelerate to 2,170 km/h or <b>Gun</b> to fire. Tap <b>Target</b> to select a contact and <b>Missile</b> once the lock ring fills.</p><p>Tap <b>Flare</b> during an incoming warning to divert one missile. Tap <b>View</b> to switch cameras, <b>Radar</b> to change radar size or hide it, and <b>Ⅱ</b> to pause. Drag on open sky to look around in chase view.</p></details>
 <details name="guide-topic"><summary>Radar, target lock &amp; ammunition</summary><p>Your jet is the triangle at the radar center. Green marks your wingman, amber marks your selected enemy, and pink marks other enemies. The compass shows heading, speed is in km/h, and altitude is in meters.</p><p>Bring the selected contact within <b>1,250 m</b> and keep it near the nose until the ring fills and the lock tone sounds. The cannon can fire at any time while rounds remain.</p><p>You start with <b>120 rounds and 6 missiles</b>. Every 12 seconds of flight restores up to 35 rounds and one missile. Clearing either of the first two phases adds up to two missiles, capped at six.</p></details>
 <details name="guide-topic"><summary>Health, warnings &amp; repair</summary><p><b>HULL</b> shows your health percentage. The bar and HP count beside each visible enemy show its remaining health. <b>LAUNCHING</b> signals an enemy attack. The incoming alarm pulses faster as a missile gets closer.</p><p>After eight seconds without damage, <b>REPAIRING</b> appears. You recover one hull point every two seconds, up to 100%. A new hit restarts the delay. Climb when the terrain warning appears. Hitting the ground or water, or reaching zero hull, ends the sortie.</p></details>
 <details name="guide-topic"><summary>Levels, scoring &amp; settings</summary><p>Clear all contacts in three phases per level: fighters, a support flight, then island installations. Finish a level to unlock the next of six. You can retry after defeat or replay an unlocked level. Progress saves in this browser when local storage is available.</p><p>Aircraft are worth 500 points each and ground installations 400. Completing a level earns five bonus points per remaining hull point. Each new attempt starts with full hull and ammunition.</p><p>Choose <b>Low</b>, <b>Medium</b>, or <b>High</b> graphics quality before launch or while paused. Use <b>Volume</b> or <b>Mute</b> to adjust sound.</p></details>
-</details></section>
+</details></section></div>
 <script>
 'use strict';
 const $=id=>document.getElementById(id),scene=$('scene'),hud=$('hud'),ctx=hud.getContext('2d'),gl=scene.getContext('webgl2',{antialias:true,alpha:false});
@@ -498,7 +504,27 @@ if(s!=='play'){
   }
 }
 volume()}
-function start(){if(state!=='paused'){level=clamp(parseInt($('levelPick').value,10)||level,1,unlocked);reset();}overlay('play');audioStart();last=performance.now()}
+const phoneDisplay=matchMedia('(pointer:coarse)').matches && Math.min(screen.width,screen.height)<=1024;
+const flightScreen=$('flightScreen');
+let landscapeGame=false,quarterTurn=false;
+async function mobileFullscreen(){
+  const root=document.documentElement;
+  try{
+    if(!document.fullscreenElement){
+      if(root.requestFullscreen)await root.requestFullscreen();
+      else if(root.webkitRequestFullscreen)await root.webkitRequestFullscreen();
+    }
+    await screen.orientation?.lock?.('landscape');
+  }catch{/* The rotated layout also works in a regular browser tab. */}
+}
+function start(){
+  if(phoneDisplay){
+    landscapeGame=true;
+    flightScreen.classList.add('landscape-game');
+    resize();
+    mobileFullscreen();
+  }
+if(state!=='paused'){level=clamp(parseInt($('levelPick').value,10)||level,1,unlocked);reset();}overlay('play');audioStart();last=performance.now()}
 $('launch').onclick=start;$('restart').onclick=()=>{reset();overlay('play')};$('pause').onclick=()=>overlay('paused');document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play')overlay('paused')});window.onblur=()=>{if(state==='play')overlay('paused')};
 function active(){return enemies[target]?.hp>0?enemies[target]:null}
 function cycle(){for(let i=1;i<=enemies.length;i++){let idx=(target+i)%enemies.length;if(enemies[idx].hp>0){target=idx;lock=0;sound(760,.08);break}}}
@@ -534,7 +560,7 @@ function releaseFlares(){
 function action(code){if(code==='Escape'){if(state==='play')overlay('paused');else if(state==='paused')start();return}if(state!=='play')return;if(code==='KeyF')launchMissile();if(code==='KeyX')releaseFlares();if(code==='KeyR')cycle();if(code==='KeyC'){camMode=(camMode+1)%5;notify(cameras[camMode]+' view')}if(code==='Tab')radar=(radar+1)%3}
 window.onkeydown=e=>{if(state==='play'||e.code==='Escape'){e.preventDefault();if(!e.repeat)action(e.code);keys.add(e.code)}};window.onkeyup=e=>keys.delete(e.code);
 for(let btn of document.querySelectorAll('[data-key]')){btn.onpointerdown=e=>{e.preventDefault();btn.setPointerCapture(e.pointerId);keys.add(btn.dataset.key);action(btn.dataset.key)};btn.onlostpointercapture=()=>keys.delete(btn.dataset.key)}
-const pad=$('pad');function steer(e){let b=pad.getBoundingClientRect(),x=(e.clientX-b.left-b.width/2)/40,y=(e.clientY-b.top-b.height/2)/40;let radius=Math.hypot(x,y),travel=clamp((radius-.10)/.90,0,1);
+const pad=$('pad');function steer(e){let b=pad.getBoundingClientRect(),x=(e.clientX-b.left-b.width/2)/40,y=(e.clientY-b.top-b.height/2)/40;if(quarterTurn)[x,y]=[y,-x];let radius=Math.hypot(x,y),travel=clamp((radius-.10)/.90,0,1);
 let gain=travel*(.58+.42*travel)/(radius||1);stick=[x*gain,y*gain];$('nub').style.transform='translate('+stick[0]*30+'px,'+stick[1]*30+'px)'}pad.onpointerdown=e=>{pointerFlight=null;pad.setPointerCapture(e.pointerId);steer(e)};pad.onpointermove=e=>{if(pad.hasPointerCapture(e.pointerId))steer(e)};pad.onlostpointercapture=()=>{stick=[0,0];$('nub').style.transform=''};
 let mouseGun=false,pointerFlight=null;
 function pointerAxis(offset,halfSize){
@@ -542,6 +568,7 @@ function pointerAxis(offset,halfSize){
   const travel=clamp((distance-dead)/Math.max(1,halfSize*.85-dead),0,1);
   return Math.sign(offset)*travel*(.65+.35*travel);
 }
+function flightPoint(e){return quarterTurn?[e.clientY,H-e.clientX]:[e.clientX,e.clientY]}
 scene.oncontextmenu=e=>{if(state==='play')e.preventDefault()};
 // Mouse events report each button edge even when another button is already held.
 scene.onmousedown=e=>{
@@ -549,20 +576,21 @@ scene.onmousedown=e=>{
   e.preventDefault();
   if(e.button===0){mouseGun=true;fireGun()}
   if(e.button===2)launchMissile();
-  if(e.button===1){pointerFlight=null;drag=[e.clientX,e.clientY]}
+  if(e.button===1){pointerFlight=null;drag=flightPoint(e)}
 };
 window.addEventListener('mouseup',e=>{if(e.button===0)mouseGun=false;if(e.button===1)drag=null});
 scene.onpointerdown=e=>{
   if(state!=='play')return;
   scene.setPointerCapture(e.pointerId);
-  if(e.pointerType==='touch'){pointerFlight=null;e.preventDefault();drag=[e.clientX,e.clientY]}
+  if(e.pointerType==='touch'){pointerFlight=null;e.preventDefault();drag=flightPoint(e)}
 };
 scene.onpointermove=e=>{
   if(state!=='play')return;
-  if(drag){orbit[0]+=(e.clientX-drag[0])*.006;orbit[1]=clamp(orbit[1]+(drag[1]-e.clientY)*.005,-.55,1.15);drag=[e.clientX,e.clientY];return}
+  const [x,y]=flightPoint(e);
+  if(drag){orbit[0]+=(x-drag[0])*.006;orbit[1]=clamp(orbit[1]+(drag[1]-y)*.005,-.55,1.15);drag=[x,y];return}
   if(e.pointerType!=='mouse')return;
-  if(e.clientX<0||e.clientX>=W||e.clientY<0||e.clientY>=H){pointerFlight=null;return}
-  pointerFlight=[e.clientX,e.clientY];
+  if(x<0||x>=W||y<0||y>=H){pointerFlight=null;return}
+  pointerFlight=[x,y];
 };
 scene.onpointerleave=()=>{pointerFlight=null};
 scene.onlostpointercapture=()=>{mouseGun=false;drag=null};
@@ -664,7 +692,19 @@ if(a.hp<=0){overlay('lose');return}
 if(nextWave>0&&(nextWave-=dt)<=0){if(stage===2){score+=Math.round(a.hp*5);completeLevel()}else{stage++;a.missiles=Math.min(6,a.missiles+2);spawn()}}
 flightAudio(a,boost,dt)
 }
-function resize(){if(W!==innerWidth||H!==innerHeight)pointerFlight=null;W=innerWidth;H=innerHeight;let px=Math.min(devicePixelRatio,[1,1.4,1.8][quality])*res;scene.width=Math.max(1,Math.round(W*px));scene.height=Math.max(1,Math.round(H*px));let ratio=Math.min(devicePixelRatio,2);hud.width=W*ratio;hud.height=H*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);zoom=[.60*W/H,.60]}window.addEventListener('resize',resize);resize();
+function resize(){
+  const viewport=landscapeGame && window.visualViewport;
+  const width=viewport?Math.round(viewport.width):innerWidth,height=viewport?Math.round(viewport.height):innerHeight;
+  const rotate=landscapeGame && height>width;
+  const nextW=rotate?height:width,nextH=rotate?width:height;
+  if(W!==nextW||H!==nextH||quarterTurn!==rotate){pointerFlight=null;drag=null;stick=[0,0];$('nub').style.transform=''}
+  W=nextW;H=nextH;quarterTurn=rotate;
+  if(landscapeGame){
+    flightScreen.style.width=W+'px';
+    flightScreen.style.height=H+'px';
+    flightScreen.style.transform=rotate?'translateX('+H+'px) rotate(90deg)':'none';
+  }
+  let px=Math.min(devicePixelRatio,[1,1.4,1.8][quality])*res;scene.width=Math.max(1,Math.round(W*px));scene.height=Math.max(1,Math.round(H*px));let ratio=Math.min(devicePixelRatio,2);hud.width=W*ratio;hud.height=H*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);zoom=[.60*W/H,.60]}window.addEventListener('resize',resize);if(phoneDisplay)window.visualViewport?.addEventListener('resize',resize);resize();
 function camera(dt){let a=player,p=a.p,basis=frame(a.h,a.pitch,a.b),f=basis[2],to,at,roll=0;
 if(state==='brief'){let angle=1.96+.14*Math.sin(t*.16),d=W<H?24:18;to=add(p,[Math.sin(angle)*d,5.0,Math.cos(angle)*d]);let dir=unit(sub(p,to)),right=unit(cross(up,dir));at=add(p,mul(right,W<H?0:-4));if(W<H)at[1]-=3.8}
 else{if(!drag){orbit[0]*=Math.exp(-dt*3);orbit[1]*=Math.exp(-dt*3)}let view=frame(a.h+orbit[0],a.pitch-orbit[1],0)[2],distance=(camMode===1?14:22)+3*a.burner;to=add(add(p,mul(view,-distance)),mul(up,camMode===1?3.7:6));at=add(p,mul(f,22));chaseRoll+=(a.b*.23-chaseRoll)*(1-Math.exp(-dt*5));roll=chaseRoll;if(camMode===2){to=add(add(p,mul(f,3)),mul(basis[1],1.85));at=add(to,mul(f,60));roll=a.b}if(camMode===3&&active()){let d=unit(sub(active().p,p));to=add(add(p,mul(d,-19)),[0,6,0]);at=active().p}if(camMode===4){let m=pool.find(o=>o.kind==='missile'&&o.life>0);if(m){to=add(add(m.p,mul(unit(m.vel),-12)),[0,3,0]);at=add(m.p,m.vel)}}}

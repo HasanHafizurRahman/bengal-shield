@@ -12,11 +12,11 @@
 @media(min-width:880px){#menu{display:grid;grid-template-columns:minmax(290px,1fr) minmax(410px,500px);align-items:center;gap:5vw}#guide{max-height:83vh;overflow:auto;scrollbar-color:#638375 #122a30}}
 @media(max-width:879px){#menu{padding:18px}#guide{padding:15px}#menu h1 br{display:none}#menu h1 br:after{content:' '}}
 </style><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
-<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly your fighter over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><div class="row"><label id="fighterRow">Fighter <select id="fighterPick"><option>J-10C</option><option value="MiG-29">MiG-29 · Bangladesh AF</option></select></label><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label></div><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
+<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly your fighter over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><div class="row"><label id="fighterRow">Fighter <select id="fighterPick"><option>J-10CE</option><option value="MiG-29">MiG-29</option></select></label><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label></div><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
 <summary class="guide-toggle">How to play</summary>
 <details name="guide-topic"><summary>Quick start</summary>
 <ol class="quick">
-<li><strong>Choose your fighter.</strong> Select the J-10C or MiG-29 before launching your level.</li>
+<li><strong>Choose your fighter.</strong> Select the J-10CE or MiG-29 before launching your level.</li>
 <li><strong>Fly.</strong> <span id="firstSteer">Move the mouse to steer. Bring it back to the center to level out.</span></li>
 <li><strong>Find a contact.</strong> Follow the amber marker. If it leaves the screen, follow the turn and altitude cues.</li>
 <li><strong>Engage.</strong> <span id="firstFire">Hold left-click for the cannon. Keep the marked contact near the reticle until the lock ring fills, then right-click for a missile.</span></li>
@@ -129,8 +129,8 @@ function mesh(build){verts=[];build();let vao=gl.createVertexArray(),buf=gl.crea
 const paint=[.30,.38,.40],light=[.46,.52,.52],dark=[.075,.105,.12],glass=[.055,.16,.21],hot=[1,.32,.048],metal=[.14,.15,.15];
 function hull(sections,col,m=1,x=0,N=20){const ring=([z,y,rx,ry],i)=>[x+rx*Math.cos(i*TAU/N),y+ry*Math.sin(i*TAU/N),z];for(let j=1;j<sections.length;j++){let a=sections[j-1],b=sections[j];for(let i=0;i<N;i++){let p=ring(a,i),q=ring(a,i+1),r=ring(b,i+1),s=ring(b,i);const normal=k=>unit([Math.cos(k*TAU/N)/Math.max(.05,(a[2]+b[2])/2),Math.sin(k*TAU/N)/Math.max(.05,(a[3]+b[3])/2),-(b[2]-a[2])/Math.max(.01,b[0]-a[0])]);let n=normal(i),nn=normal(i+1);tri(p,q,r,col,m,[n,nn,nn]);tri(p,r,s,col,m,[n,nn,n])}}}
 function plate(points,col,th=.10){let top=points.map(v=>add(v,[0,th,0]));for(let i=1;i<points.length-1;i++){let a=top[0],b=top[i],c=top[i+1];if(cross(sub(b,a),sub(c,a))[1]<0)[b,c]=[c,b];tri(a,b,c,col,1);tri(points[0],points[i],points[i+1],col,1,[mul(up,-1),mul(up,-1),mul(up,-1)])}for(let i=0;i<points.length;i++){let j=(i+1)%points.length;tri(points[i],top[i],top[j],dark);tri(points[i],top[j],points[j],dark)}}
-function fin(x,height,z,flag){const pts=[[x,.25,z+2],[x,height,z-.65],[x,height-.06,z-1.65],[x,.3,z-1.95]];for(let side of [-1,1]){let n=[side,0,0],p=pts.map(v=>add(v,[.058*side,0,0]));tri(p[0],p[1],p[2],light,1,[n,n,n]);tri(p[0],p[2],p[3],paint,1,[n,n,n]);if(flag){let xx=x+.063*side,y=height*.56,zz=z-.48;let pt=(u,v)=>[xx,y+v,zz+u];let g=[.008,.25,.12],red=[.86,.012,.035];tri(pt(-.70,0),pt(.70,0),pt(.70,.84),g);tri(pt(-.70,0),pt(.70,.84),pt(-.70,.84),g);for(let i=0;i<30;i++){let disk=k=>[xx+.004*side,y+.42+.28*Math.sin(k*TAU/30),zz+.07+.28*Math.cos(k*TAU/30)];tri([xx+.004*side,y+.42,zz+.07],disk(i),disk(i+1),red)}}}}
-function jet(type){let twin=type==='Su-30',raf=type==='Rafale',player=type==='J-10C',col=twin?[.26,.36,.45]:raf?[.38,.38,.34]:paint;
+function fin(x,height,z,flag){const pts=[[x,.25,z+2],[x,height,z-.65],[x,height-.06,z-1.65],[x,.3,z-1.95]];for(let side of [-1,1]){let n=[side,0,0],p=pts.map(v=>add(v,[.058*side,0,0]));tri(p[0],p[1],p[2],light,1,[n,n,n]);tri(p[0],p[2],p[3],paint,1,[n,n,n]);if(flag){let xx=x+.063*side,y=height*.56,zz=z-.90;let pt=(u,v)=>[xx,y+v,zz+u];let g=[.008,.25,.12],red=[.86,.012,.035];tri(pt(-.60,0),pt(.60,0),pt(.60,.72),g);tri(pt(-.60,0),pt(.60,.72),pt(-.60,.72),g);for(let i=0;i<30;i++){let disk=k=>[xx+.004*side,y+.36+.24*Math.sin(k*TAU/30),zz+.06+.24*Math.cos(k*TAU/30)];tri([xx+.004*side,y+.36,zz+.06],disk(i),disk(i+1),red)}}}}
+function jet(type){let twin=type==='Su-30',raf=type==='Rafale',player=type==='J-10CE'||type==='J-10C',col=twin?[.26,.36,.45]:raf?[.38,.38,.34]:paint;
 hull([[-6,0,.62,.61],[-4,.05,.86,.85],[-1,.05,.96,.88],[2,.1,.83,.77],[4,.10,.66,.65],[5.4,.10,.51,.47],[7.7,.04,.013,.014]],col);
 hull([[1,.72,.05,.04],[1.7,.76,.55,.34],[2.7,.81,.59,.60],[3.5,.78,.48,.46],[4.55,.66,.05,.045]],glass,2);hull([[2.05,.80,.575,.45],[2.13,.8,.582,.46]],dark);
 for(let i of [-1,1]){let wing=twin?6.5:raf?5.2:4.8;plate([[i*.52,.0,2.3],[i*wing,-.12,-3.1],[i*(wing-.18),-.13,-4.0],[i*.62,.03,-3.72]],col,.14);plate([[i*.8,.17,twin?-3.7:3.45],[i*(twin?2.95:2.15),.12,twin?-6.35:1.58],[i*1.83,.11,twin?-6.66:1.24],[i*.63,.16,twin?-5.8:1.77]],light);hull([[-3.95,-.10,.025,.025],[-3.29,-.1,.10,.10],[-1.95,-.1,.095,.095],[-1.5,-.1,.01,.01]],light,1,i*(wing-.16),8);
@@ -165,7 +165,7 @@ function buildFulcrum(){
   hull([[2.55,.87,.55,.50],[2.64,.87,.55,.50]],dark,0);
 }
 function box(x,y,z,dx,dy,dz,col){let p=(a,b,c)=>[x+a*dx,y+b*dy,z+c*dz];let v=[p(-1,-1,-1),p(1,-1,-1),p(1,1,-1),p(-1,1,-1),p(-1,-1,1),p(1,-1,1),p(1,1,1),p(-1,1,1)];for(let [a,b,c,d] of [[0,3,2,1],[4,5,6,7],[0,4,7,3],[1,2,6,5],[3,7,6,2],[0,1,5,4]]){tri(v[a],v[b],v[c],col);tri(v[a],v[c],v[d],col)}}
-const models={};for(let s of ['J-10C','Rafale','Su-30'])models[s]=mesh(()=>jet(s));
+const models={};for(let s of ['J-10CE','Rafale','Su-30'])models[s]=mesh(()=>jet(s));models['J-10C']=models['J-10CE'];
 models['MiG-29']=mesh(buildFulcrum);
 models.gull=mesh(()=>{
   hull([[-.56,0,.02,.02],[-.12,.04,.13,.11],[.34,.06,.10,.10],[.49,.05,.02,.025]],[.73,.77,.75],0,0,8);
@@ -460,8 +460,8 @@ try{
   finished=unlocked===campaign.length&&saved?.finished===true;
 }catch{}
 level=unlocked;
-let fighter='J-10C';
-$('fighterPick').onchange=()=>{fighter=$('fighterPick').value==='MiG-29'?'MiG-29':'J-10C'};
+let fighter='J-10CE';
+$('fighterPick').onchange=()=>{fighter=$('fighterPick').value==='MiG-29'?'MiG-29':'J-10CE'};
 function showPicker(selected){
   $('fighterRow').hidden=false;
   $('levelRow').hidden=false;
@@ -731,7 +731,7 @@ if(camMode!==2||state==='brief'){
   }
   }
 }
-if(state==='brief')return;draw(models['J-10C'],wingman,b);for(let e of enemies){if(e.hp<=0)continue;let [x,y,z]=coords(e.p);if(z< -12||Math.abs(x)>Math.max(0,z)*zoom[0]+16||Math.abs(y)>Math.max(0,z)*zoom[1]+16)continue;
+if(state==='brief')return;draw(models['J-10CE'],wingman,b);for(let e of enemies){if(e.hp<=0)continue;let [x,y,z]=coords(e.p);if(z< -12||Math.abs(x)>Math.max(0,z)*zoom[0]+16||Math.abs(y)>Math.max(0,z)*zoom[1]+16)continue;
 if(z>720&&!e.groundObj){draw(models.Drone,e.p,frame(e.h,0,e.b),[1.2,1,1]);continue}draw(models[e.type],e.p,frame(e.h,0,e.b),e.groundObj?[2,2,2]:[1,1,1]);if(e.type==='Helicopter')draw(models.rotor,add(e.p,[0,1.95,0]),frame(t*35,0,0))}
 for(let o of pool){if(o.life<=0)continue;if(o.kind==='ring'){let size=2+26*(1-o.life/o.max);draw(models.ring,o.p,identity,[size,1,size]);continue}if(['smoke','mist','flash'].includes(o.kind))continue;
 let d=unit(o.vel),rot=frame(Math.atan2(d[0],d[2]),Math.asin(clamp(d[1],-1,1)),0);

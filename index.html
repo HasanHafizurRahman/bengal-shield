@@ -4,7 +4,7 @@
 #menu{display:block;padding:clamp(18px,4vw,62px);background:linear-gradient(90deg,#081b20ed,#0d242b56 52%,#091920a8)}
 #menu article{max-width:none;margin:0 0 20px}#menu h1{font-size:clamp(44px,6.6vw,94px)}
 #guide{color:#edf5ef;background:#092027ed;border:1px solid #94b7a65c;border-radius:6px;padding:18px 22px;box-shadow:0 8px 32px #03131751}
-#guide h2{font-size:clamp(22px,2.3vw,32px);margin:0;letter-spacing:-.04em}
+#guide>.guide-toggle{font-size:20px;color:#f2f7ed;padding:3px 0}#guide summary:focus-visible{outline:2px solid #b7e699;outline-offset:3px}
 .quick{padding-left:1.4em;line-height:1.46;margin:12px 0 18px}.quick li{padding:2px 0 3px 4px}.quick li::marker{color:#b7e699;font-weight:bold}
 #guide details{margin:0;border-top:1px solid #78958855}#guide summary{font-weight:650;padding:9px 0;color:#d5ecd5}
 #guide dl{display:grid;grid-template-columns:minmax(94px,auto) 1fr;gap:6px 12px;margin:3px 0 15px;font-size:14px;line-height:1.4}#guide dt{color:#b9dfad;font-weight:650}#guide dd{margin:0}
@@ -12,14 +12,15 @@
 @media(min-width:880px){#menu{display:grid;grid-template-columns:minmax(290px,1fr) minmax(410px,500px);align-items:center;gap:5vw}#guide{max-height:83vh;overflow:auto;scrollbar-color:#638375 #122a30}}
 @media(max-width:879px){#menu{padding:18px}#guide{padding:15px}#menu h1 br{display:none}#menu h1 br:after{content:' '}}
 </style><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
-<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly the J-10C over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><aside id="guide" aria-labelledby="helpTitle">
-<h2 id="helpTitle">How to play</h2>
+<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly the J-10C over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
+<summary class="guide-toggle">How to play</summary>
+<details name="guide-topic"><summary>Quick start</summary>
 <ol class="quick">
 <li><strong>Fly.</strong> <span id="firstSteer">Move the mouse to steer. Bring it back to the center to level out.</span></li>
 <li><strong>Find a contact.</strong> Follow the amber marker. If it leaves the screen, follow the turn and altitude cues.</li>
 <li><strong>Engage.</strong> <span id="firstFire">Hold left-click for the cannon. Keep the marked contact near the reticle until the lock ring fills, then right-click for a missile.</span></li>
-</ol>
-<details id="desktopHelp" open><summary>Mouse &amp; keyboard</summary><dl>
+</ol></details>
+<details name="guide-topic" id="desktopHelp"><summary>Mouse &amp; keyboard</summary><dl>
 <dt>Mouse</dt><dd>Steer in any direction. Farther from center gives a stronger response. The jet banks into turns. Hard turns and climbs cost speed, while leveling out or descending helps recover it. At full boost, allow room for a wider turn.</dd>
 <dt>Arrow keys</dt><dd>↑ climb, ↓ descend, ← turn left, → turn right. Release to level out when the pointer is centered.</dd>
 <dt>W / S · A / D</dt><dd>W lowers the nose, S raises it. A and D turn left and right.</dd>
@@ -32,11 +33,11 @@
 <dt>C / Middle drag</dt><dd>C cycles chase, close chase, cockpit, target, and missile views. Hold the middle mouse button and drag to look around in chase view.</dd>
 <dt>Esc / Ⅱ</dt><dd>Pause to read this guide, adjust settings, restart the level, or resume.</dd>
 </dl></details>
-<details id="touchHelp"><summary>Touch controls</summary><p>Push the left stick up to climb, down to descend, or sideways to turn. Release to level out. Hold <b>Boost</b> to accelerate to 2,170 km/h or <b>Gun</b> to fire. Tap <b>Target</b> to select a contact and <b>Missile</b> once the lock ring fills.</p><p>Tap <b>Flare</b> during an incoming warning to divert one missile. Tap <b>View</b> to switch cameras, <b>Radar</b> to change radar size or hide it, and <b>Ⅱ</b> to pause. Drag on open sky to look around in chase view.</p></details>
-<details><summary>Radar, target lock &amp; ammunition</summary><p>Your jet is the triangle at the radar center. Green marks your wingman, amber marks your selected enemy, and pink marks other enemies. The compass shows heading, speed is in km/h, and altitude is in meters.</p><p>Bring the selected contact within <b>1,250 m</b> and keep it near the nose until the ring fills and the lock tone sounds. The cannon can fire at any time while rounds remain.</p><p>You start with <b>120 rounds and 6 missiles</b>. Every 12 seconds of flight restores up to 35 rounds and one missile. Clearing either of the first two phases adds up to two missiles, capped at six.</p></details>
-<details><summary>Health, warnings &amp; repair</summary><p><b>HULL</b> shows your health percentage. The bar and HP count beside each visible enemy show its remaining health. <b>LAUNCHING</b> signals an enemy attack. The incoming alarm pulses faster as a missile gets closer.</p><p>After eight seconds without damage, <b>REPAIRING</b> appears. You recover one hull point every two seconds, up to 100%. A new hit restarts the delay. Climb when the terrain warning appears. Hitting the ground or water, or reaching zero hull, ends the sortie.</p></details>
-<details><summary>Levels, scoring &amp; settings</summary><p>Clear all contacts in three phases per level: fighters, a support flight, then island installations. Finish a level to unlock the next of six. You can retry after defeat or replay an unlocked level. Progress saves in this browser when local storage is available.</p><p>Aircraft are worth 500 points each and ground installations 400. Completing a level earns five bonus points per remaining hull point. Each new attempt starts with full hull and ammunition.</p><p>Choose <b>Low</b>, <b>Medium</b>, or <b>High</b> graphics quality before launch or while paused. Use <b>Volume</b> or <b>Mute</b> to adjust sound.</p></details>
-</aside></section>
+<details name="guide-topic" id="touchHelp"><summary>Touch controls</summary><p>Push the left stick up to climb, down to descend, or sideways to turn. Release to level out. Hold <b>Boost</b> to accelerate to 2,170 km/h or <b>Gun</b> to fire. Tap <b>Target</b> to select a contact and <b>Missile</b> once the lock ring fills.</p><p>Tap <b>Flare</b> during an incoming warning to divert one missile. Tap <b>View</b> to switch cameras, <b>Radar</b> to change radar size or hide it, and <b>Ⅱ</b> to pause. Drag on open sky to look around in chase view.</p></details>
+<details name="guide-topic"><summary>Radar, target lock &amp; ammunition</summary><p>Your jet is the triangle at the radar center. Green marks your wingman, amber marks your selected enemy, and pink marks other enemies. The compass shows heading, speed is in km/h, and altitude is in meters.</p><p>Bring the selected contact within <b>1,250 m</b> and keep it near the nose until the ring fills and the lock tone sounds. The cannon can fire at any time while rounds remain.</p><p>You start with <b>120 rounds and 6 missiles</b>. Every 12 seconds of flight restores up to 35 rounds and one missile. Clearing either of the first two phases adds up to two missiles, capped at six.</p></details>
+<details name="guide-topic"><summary>Health, warnings &amp; repair</summary><p><b>HULL</b> shows your health percentage. The bar and HP count beside each visible enemy show its remaining health. <b>LAUNCHING</b> signals an enemy attack. The incoming alarm pulses faster as a missile gets closer.</p><p>After eight seconds without damage, <b>REPAIRING</b> appears. You recover one hull point every two seconds, up to 100%. A new hit restarts the delay. Climb when the terrain warning appears. Hitting the ground or water, or reaching zero hull, ends the sortie.</p></details>
+<details name="guide-topic"><summary>Levels, scoring &amp; settings</summary><p>Clear all contacts in three phases per level: fighters, a support flight, then island installations. Finish a level to unlock the next of six. You can retry after defeat or replay an unlocked level. Progress saves in this browser when local storage is available.</p><p>Aircraft are worth 500 points each and ground installations 400. Completing a level earns five bonus points per remaining hull point. Each new attempt starts with full hull and ammunition.</p><p>Choose <b>Low</b>, <b>Medium</b>, or <b>High</b> graphics quality before launch or while paused. Use <b>Volume</b> or <b>Mute</b> to adjust sound.</p></details>
+</details></section>
 <script>
 'use strict';
 const $=id=>document.getElementById(id),scene=$('scene'),hud=$('hud'),ctx=hud.getContext('2d'),gl=scene.getContext('webgl2',{antialias:true,alpha:false});
@@ -331,9 +332,16 @@ function buildEffects(){
     const phase=TAU*(hz*x+(end-hz)*x*x/(2*length));
     return env*(sin(phase)+.13*sin(phase*2)+.055*sin(phase*3));
   }
-  makeEffect('acquire',.10,t=>pulse(t,.004,.075,530,670));
-  makeEffect('locked',.49,t=>pulse(t,0,.115,675,850)+pulse(t,.12,.34,850,852));
-  makeEffect('warning',.235,t=>pulse(t,0,.094,1180,985)+pulse(t,.112,.109,795,785));
+  // A short, gated receiver buzz for search and acquisition. A steady tail confirms lock.
+  function receiver(t,hz,rate){
+    const gate=.5+.5*Math.tanh(2.8*sin(TAU*rate*t));
+    return (.24+.76*gate)*(sin(TAU*hz*t)+.18*sin(TAU*hz*2*t));
+  }
+  makeEffect('sweep',.38,t=>receiver(t,670,29)*Math.sin(Math.PI*t/.38)**3);
+  makeEffect('acquire',.14,t=>receiver(t,735,38)*Math.sin(Math.PI*t/.14)**1.5);
+  makeEffect('locked',.40,t=>pulse(t,0,.38,880,890)*(.90+.10*sin(TAU*44*t)*exp(-t*14)));
+  // Short alternating notes keep a gap between warning bursts, even at maximum urgency.
+  makeEffect('warning',.245,t=>pulse(t,0,.087,1050,1030)+.9*pulse(t,.112,.105,1430,1390));
   makeEffect('launch',1.34,(t,low,mid,high,w)=>{
     const latch=(w*.36+sin(TAU*195*t)*.22)*exp(-t*97);
     const ignition=(low*.9+mid*.69+high*.45)*exp(-t*16);
@@ -385,7 +393,7 @@ function audioStart(){
 function flightAudio(a,boost,dt){
   if(Number.isFinite(nearestThreat)){
     lastWarn-=dt;
-    if(lastWarn<=0){const urgency=1-clamp(nearestThreat/650,0,1);playEffect('warning',.38,{pitch:.96+.13*urgency});lastWarn=.90-.59*urgency}
+    if(lastWarn<=0){const urgency=1-clamp(nearestThreat/650,0,1);playEffect('warning',.37+.06*urgency);lastWarn=.91-.57*urgency}
   }else lastWarn=0;
   if(!audio||!roarGain||audio.currentTime<nextMix)return;nextMix=audio.currentTime+.08;
   const now=audio.currentTime,thrust=clamp((a.speed-36)/97,0,1);
@@ -584,7 +592,7 @@ if(en.charging>0){
     notify(sam?'SAM launch':'Enemy missile launch');playEffect('launch',.76/(1+dist*.004),{pan:-.75*dot(unit(rel),frame(a.h,0,0)[0]),cutoff:2700,endCutoff:450});
   }
 }else if((en.cd-=dt)<=0){
-  if(en.type==='Radar'){en.cd=6;notify('Island radar sweep');sound(620,.12)}
+  if(en.type==='Radar'){en.cd=6;notify('Island radar sweep');if(!Number.isFinite(nearestThreat))playEffect('sweep',.20)}
   else{en.charging=sam?1.5:1.0;notify(sam?'SAM charging':'Enemy preparing attack');sound(540,.10,'triangle',.11,690)}
 }}
 nearestThreat=Infinity;
@@ -711,7 +719,7 @@ let terrainWarning=Math.min(a.p[1]-ground(a.p[0],a.p[2]),ahead[1]-ground(ahead[0
 if(terrainWarning||warning||msgTime>0||lock===1){let label=terrainWarning?'LOW TERRAIN CLEARANCE · CLIMB':warning?'MISSILE INBOUND':msgTime>0?message: 'LOCKED · RIGHT CLICK / F';text2(label,mx,H*(small?.30:.22),warning?'#ffb18b':amber,'center',small?11:14)}if(camMode===2){ctx.strokeStyle='#1e3037';ctx.lineWidth=10;ctx.beginPath();ctx.ellipse(mx,H*.73,W*.55,H*.71,0,PI,TAU);ctx.stroke()}ctx.restore()}
 let slow=0,fast=0;function tick(now){let raw=last?(now-last)/1000:.016;last=now;let dt=Math.min(.12,raw);if(state==='brief'||state==='play')t+=dt;if(state==='play'){let steps=Math.ceil(dt/.018);for(let i=0;i<steps&&state==='play';i++)update(dt/steps);if(raw>.038){slow++;fast=0}else{fast++;slow=Math.max(0,slow-1)}if(slow>28&&res>.55){res=Math.max(.55,res-.12);resize();slow=0}if(fast>240&&res<1){res=Math.min(1,res+.08);resize();fast=0}}
 if(state==='brief'||state==='play'){camera(dt);render()}drawHud();requestAnimationFrame(tick)}
-if(mobile){$('desktopHelp').open=false;$('touchHelp').open=true;$('firstSteer').textContent='Move the left stick to steer. Release it to level out.';$('firstFire').textContent='Hold Gun for cannon fire. Keep the marked contact near the reticle until the lock ring fills, then tap Missile.'}
+if(mobile){$('firstSteer').textContent='Move the left stick to steer. Release it to level out.';$('firstFire').textContent='Hold Gun for cannon fire. Keep the marked contact near the reticle until the lock ring fills, then tap Missile.'}
 reset();requestAnimationFrame(tick)
 }
 </script></html>

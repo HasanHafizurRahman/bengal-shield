@@ -12,10 +12,11 @@
 @media(min-width:880px){#menu{display:grid;grid-template-columns:minmax(290px,1fr) minmax(410px,500px);align-items:center;gap:5vw}#guide{max-height:83vh;overflow:auto;scrollbar-color:#638375 #122a30}}
 @media(max-width:879px){#menu{padding:18px}#guide{padding:15px}#menu h1 br{display:none}#menu h1 br:after{content:' '}}
 </style><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
-<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly the J-10C over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
+<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly your fighter over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><div class="row"><label id="fighterRow">Fighter <select id="fighterPick"><option>J-10C</option><option value="MiG-29">MiG-29 · Bangladesh AF</option></select></label><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label></div><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><details id="guide">
 <summary class="guide-toggle">How to play</summary>
 <details name="guide-topic"><summary>Quick start</summary>
 <ol class="quick">
+<li><strong>Choose your fighter.</strong> Select the J-10C or MiG-29 before launching your level.</li>
 <li><strong>Fly.</strong> <span id="firstSteer">Move the mouse to steer. Bring it back to the center to level out.</span></li>
 <li><strong>Find a contact.</strong> Follow the amber marker. If it leaves the screen, follow the turn and altitude cues.</li>
 <li><strong>Engage.</strong> <span id="firstFire">Hold left-click for the cannon. Keep the marked contact near the reticle until the lock ring fills, then right-click for a missile.</span></li>
@@ -74,6 +75,7 @@ if(d.y>.012){vec2 uv=(eye.xz+d.xz*((1200.-eye.y)/max(.015,d.y)))*.0014+vec2(t*.0
 if(d.y<0.){float dist=-eye.y/min(-.0001,d.y);vec2 p=(eye.xz+d.xz*dist);c=mix(ocean(p,d),sky(vec3(d.x,0,d.z)),1.-exp(-dist*.00020));}
 if(d.y<-.001)c*=shadow(eye+d*(-eye.y/d.y));o=vec4(grade(c),1);}`);
 const meshP=program(`layout(location=0) in vec3 a;layout(location=1) in vec3 n;layout(location=2) in vec3 col;layout(location=3) in float mat;layout(location=4) in vec4 planting;uniform bool planted;uniform float t;uniform mat3 cam,rot;uniform vec3 eye,pos,scale;uniform vec2 lens;out vec3 w,N,C,L;flat out float M;void main(){L=a;vec3 vertex=a,normal=n;
+if(mat==10.){float beat=t*5.8+pos.x*.08;vertex.y+=abs(a.x)*(.16+.46*sin(beat)*smoothstep(-.6,.25,sin(t*.85+pos.z*.04)));}
 if(planted){float angle=planting.x*.67+planting.z*.31;mat2 spin=mat2(cos(angle),sin(angle),-sin(angle),cos(angle));vertex.xz=spin*vertex.xz;normal.xz=spin*normal.xz;vertex=vertex*planting.w+planting.xyz;}
 w=pos+rot*(vertex*scale);if(mat==4.)w.y=max(0.,w.y);if(mat==7.)w.x+=.15*sin(w.z*.17+t*1.55)*cos(w.x*.08+t*.49);N=normalize(rot*(normal/scale));C=col;M=mat;vec3 v=transpose(cam)*(w-eye);gl_Position=vec4(v.xy/lens,v.z*1.00002-.2,v.z);}`,`in vec3 w,N,C,L;flat in float M;out vec4 o;uniform vec3 eye;`+atmosphere+`
 void main(){if(M==8.){
@@ -82,7 +84,14 @@ void main(){if(M==8.){
   vec3 flame=mix(vec3(.35,.56,1.),vec3(.90,.40,.22),axial);
   flame=mix(flame,vec3(.83,.85,1.),cells*.60);
   o=vec4(flame,(1.-axial)*(.20+.30*cells));return;
-}vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0.):vec3(0.))),v=normalize(eye-w),s=sun(),r=reflect(-v,n);float nv=abs(dot(n,v)),rough=M==2.?.12:M==1.?.32:.7,fr=pow(1.-nv,5.);vec3 c=C*(.43+.83*max(dot(n,s),0.)+.14*n.y)+sky(r)*(.035+fr*.14)+vec3(pow(max(dot(reflect(-s,n),v),0.),2./(rough*rough)))*(.12+.55*(1.-rough));if(M==2.)c=mix(c,sky(r),.38+.45*fr);if(M==3.)c=C*2.;if(M==5.||M==7.){
+}vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0.):vec3(0.))),v=normalize(eye-w),s=sun(),r=reflect(-v,n);float nv=abs(dot(n,v)),rough=M==2.?.12:M==1.?.32:.7,fr=pow(1.-nv,5.);vec3 base=C;
+if(M==9.){
+  vec2 uv=vec2(L.x+.29*L.y,L.z-.61*L.y);
+  float band=sin(uv.y*1.44+uv.x*.58+4.1*noise(uv*.42));
+  base=mix(vec3(.16,.61,.65),vec3(.07,.35,.55),smoothstep(-.43,-.37,band));
+  base=mix(base,vec3(.038,.12,.28),smoothstep(.73,.79,band));
+}
+vec3 c=base*(.43+.83*max(dot(n,s),0.)+.14*n.y)+sky(r)*(.035+fr*.14)+vec3(pow(max(dot(reflect(-s,n),v),0.),2./(rough*rough)))*(.12+.55*(1.-rough));if(M==2.)c=mix(c,sky(r),.38+.45*fr);if(M==3.)c=C*2.;if(M==5.||M==7.){
   vec2 uv=vec2(w.x+.55*w.z,w.y-.45*w.z);
   float clusters=noise(uv*1.15)*.65+noise(uv*3.)*.35;
   float rim=abs(dot(n,v)),detail=1.-smoothstep(240.,650.,distance(w,eye));
@@ -129,8 +138,42 @@ plate([[i*1.22,.155,-2.9],[i*4.10,-.005,-3.0],[i*3.84,.005,-2.77]],dark,.012)}
 for(let x of twin||raf?[-.64,.64]:[0]){hull([[-6.46,.01,.53,.52],[-5.88,.01,.63,.63],[-4.2,.02,.66,.66]],metal,1,x);hull([[-6.48,.01,.44,.44],[-6.47,.01,.01,.01]],hot,3,x);if(!raf||x<0)fin(twin?x*1.44:0,twin?2.65:3.0,-4.38,player)}
 if(player){const glyphs=['111101101101111','010110010010111','111001111100111'];for(let side of [-1,1])glyphs.forEach((g,j)=>{for(let k=0;k<15;k++)if(g[k]==='1'){let z=-4.83+(j*4+k%3)*.067*side,y=1.54-Math.floor(k/3)*.068,x=side*.069;let a=[x,y,z],b=[x,y,z+side*.060],c=[x,y-.060,z+side*.060],d=[x,y-.060,z];tri(a,b,c,dark);tri(a,c,d,dark)}})}
 for(let x of player?[0]:[-.8,.8]){hull([[-2,-.43,.6,.42],[1.68,-.50,.67,.43],[2.57,-.48,.68,.42]],col,1,x);hull([[2.57,-.48,.60,.35],[2.59,-.48,.01,.01]],dark,0,x)}}
+function buildFulcrum(){
+  hull([[-5.8,.05,.38,.32],[-3,.17,1,.65],[0,.20,1.05,.76],[2.7,.18,.81,.72],[4.85,.12,.57,.48]],paint,9);
+  hull([[4.85,.12,.57,.48],[5.8,.12,.42,.37],[7.25,.10,.02,.02]],dark,0);
+  for(const side of [-1,1]){
+    const engineX=side*.87;
+    hull([[-6.05,-.16,.55,.53],[-4.1,-.08,.66,.67],[-1,-.10,.78,.66],[1.9,-.17,.60,.48]],paint,9,engineX);
+    hull([[1.9,-.17,.56,.45],[1.92,-.17,.01,.01]],dark,0,engineX);
+    hull([[-6.47,-.16,.47,.45],[-6.03,-.16,.56,.54]],metal,0,engineX);
+    hull([[-6.48,-.16,.02,.02],[-6.47,-.16,.43,.41]],hot,3,engineX);
+    const start=verts.length;
+    const surface=(points)=>plate(points.map(([x,y,z])=>[x*side,y,z]),paint,.10);
+    surface([[.59,.22,3.65],[1.65,.17,1.05],[5.55,.17,-2.27],[5.24,.17,-3.50],[.69,.17,-3.18]]);
+    surface([[.76,.12,-3.62],[2.96,.12,-5.44],[2.76,.12,-6.42],[.78,.12,-5.77]]);
+    fin(engineX*1.20,2.67,-4.05,false);
+    for(let i=start+9;i<verts.length;i+=10)if(verts[i]===1)verts[i]=9;
+    for(const [radius,y,color] of [[.36,.282,[.025,.33,.19]],[.165,.286,[.79,.055,.10]]]){
+      const cx=side*4.34,cz=-2.40;
+      for(let j=0;j<24;j++){
+        const rim=k=>[cx+radius*Math.cos(k*TAU/24),y,cz+radius*Math.sin(k*TAU/24)];
+        tri([cx,y,cz],rim(j+1),rim(j),color);
+      }
+    }
+  }
+  hull([[.85,.79,.02,.03],[1.53,.85,.52,.39],[2.60,.87,.54,.49],[3.54,.81,.46,.39],[4.45,.61,.05,.04]],glass,2);
+  hull([[2.55,.87,.55,.50],[2.64,.87,.55,.50]],dark,0);
+}
 function box(x,y,z,dx,dy,dz,col){let p=(a,b,c)=>[x+a*dx,y+b*dy,z+c*dz];let v=[p(-1,-1,-1),p(1,-1,-1),p(1,1,-1),p(-1,1,-1),p(-1,-1,1),p(1,-1,1),p(1,1,1),p(-1,1,1)];for(let [a,b,c,d] of [[0,3,2,1],[4,5,6,7],[0,4,7,3],[1,2,6,5],[3,7,6,2],[0,1,5,4]]){tri(v[a],v[b],v[c],col);tri(v[a],v[c],v[d],col)}}
 const models={};for(let s of ['J-10C','Rafale','Su-30'])models[s]=mesh(()=>jet(s));
+models['MiG-29']=mesh(buildFulcrum);
+models.gull=mesh(()=>{
+  hull([[-.56,0,.02,.02],[-.12,.04,.13,.11],[.34,.06,.10,.10],[.49,.05,.02,.025]],[.73,.77,.75],0,0,8);
+  for(const side of [-1,1]){
+    const root=[side*.07,.04,.22],rear=[side*.07,.04,-.32],elbow=[side*.68,.16,.12],edge=[side*.68,.13,-.15],tip=[side*1.18,.08,-.27];
+    tri(root,rear,elbow,[.78,.80,.77],10,[up,up,up]);tri(rear,edge,elbow,[.66,.70,.69],10,[up,up,up]);tri(elbow,edge,tip,[.19,.23,.25],10,[up,up,up]);
+  }
+});
 models.Drone=mesh(()=>{hull([[-3,0,.05,.05],[-1,0,.63,.46],[1.4,.04,.47,.40],[3,0,.02,.02]],dark);for(let s of [-1,1])plate([[0,0,2],[s*5,0,-1.7],[s*4.1,0,-2.0],[0,0,-1]],paint);fin(0,1,-1,false)});
 models.Helicopter=mesh(()=>{hull([[-6,.5,.09,.16],[-2,.25,.3,.31],[0,0,.92,1],[2,.05,.91,.92],[3.4,-.2,.13,.22]],paint);hull([[.6,.68,.6,.3],[1.5,.65,.82,.59],[2.7,.25,.5,.38]],glass,2);fin(0,1.7,-4,false);box(0,1.45,0,.1,.55,.1,metal);for(let i of [-1,1])box(i*.93,-1,0,.10,.09,1.8,dark)});
 models.rotor=mesh(()=>{box(0,0,0,5.4,.035,.15,dark);box(0,.04,0,.15,.035,5.4,dark)});
@@ -417,7 +460,10 @@ try{
   finished=unlocked===campaign.length&&saved?.finished===true;
 }catch{}
 level=unlocked;
+let fighter='J-10C';
+$('fighterPick').onchange=()=>{fighter=$('fighterPick').value==='MiG-29'?'MiG-29':'J-10C'};
 function showPicker(selected){
+  $('fighterRow').hidden=false;
   $('levelRow').hidden=false;
   $('levelPick').innerHTML=campaign.map((entry,i)=>'<option value="'+(i+1)+'" '+(i+1>unlocked?'disabled':'')+'>'+ (i+1)+' · '+entry.name+(i+1>unlocked?' (locked)':'')+'</option>').join('');
   $('levelPick').value=String(selected);
@@ -439,7 +485,7 @@ function spawn(){enemies=stages[stage][1].concat(campaign[level-1].extra[stage])
 let cameraAnchor=null,chaseRoll=0;
 function reset(){lastWarn=0;nearestThreat=Infinity;pointerFlight=null;cameraAnchor=null;chaseRoll=0;player={p:[0,175,0],h:0,pitch:0,b:0,pv:0,bv:0,yv:0,speed:76,burner:0,hp:100,repairFrom:0,repairBase:100,ammo:120,missiles:6,gunCd:0,msCd:0,flareReadyAt:0,rearm:0};wingman=[-42,184,20];stage=score=elapsed=kills=shots=camMode=shake=0;orbit=[0,0];for(let p of pool)p.life=0;spawn();eye=add(player.p,[0,5,-22]);axes=identity;keys.clear();stick=[0,0]}
 function notify(s){message=s;msgTime=3}
-function overlay(s){if(s!=='play')for(const voice of voices)voice.stop();pointerFlight=null;mouseGun=false;drag=null;state=s;keys.clear();stick=[0,0];$('nub').style.transform='';$('menu').hidden=s==='play';$('pause').hidden=s!=='play';$('touch').hidden=!mobile||s!=='play';$('restart').hidden=s!=='paused';$('levelRow').hidden=true;
+function overlay(s){if(s!=='play')for(const voice of voices)voice.stop();pointerFlight=null;mouseGun=false;drag=null;state=s;keys.clear();stick=[0,0];$('nub').style.transform='';$('menu').hidden=s==='play';$('pause').hidden=s!=='play';$('touch').hidden=!mobile||s!=='play';$('restart').hidden=s!=='paused';$('levelRow').hidden=true;$('fighterRow').hidden=true;
 if(s!=='play'){
   const win=s==='win',paused=s==='paused',lastLevel=level===campaign.length;
   $('title').textContent=paused?'On hold':win?(lastLevel?'Campaign complete':'Level '+level+' clear'):'Sortie ended';
@@ -654,16 +700,35 @@ function drawDust(){
  gl.bindVertexArray(dustVAO);gl.bindBuffer(gl.ARRAY_BUFFER,dustBuf);gl.bufferSubData(gl.ARRAY_BUFFER,0,dustData.subarray(0,index));
  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);gl.drawArraysInstanced(gl.TRIANGLES,0,6,visible.length);gl.depthMask(true);gl.disable(gl.BLEND);
 }
-function render(){gl.viewport(0,0,scene.width,scene.height);gl.disable(gl.DEPTH_TEST);gl.clear(gl.DEPTH_BUFFER_BIT);gl.useProgram(skyP);shared(su);gl.bindVertexArray(null);gl.drawArrays(gl.TRIANGLES,0,3);gl.enable(gl.DEPTH_TEST);gl.useProgram(meshP);shared(mu);drawIslands();drawBoats();
+const coastalFlocks=[[10,162,120,5],[130,64,275,6],[-240,78,420,5],[-420,105,890,7],[620,160,1270,6]];
+function drawBirds(){
+  for(const [cx,cy,cz,count] of coastalFlocks){
+    const angle=t*.107+cz*.011,center=[cx+46*Math.sin(angle),cy+3*Math.sin(angle*.8),cz+30*Math.cos(angle)];
+    const [x,y,z]=coords(center);
+    if(z< -25||z>650||Math.abs(x)>Math.max(0,z)*zoom[0]+25||Math.abs(y)>Math.max(0,z)*zoom[1]+25)continue;
+    const basis=frame(Math.atan2(46*Math.cos(angle),-30*Math.sin(angle)),0,.12);
+    for(let i=0;i<count;i++){
+      const rank=Math.ceil(i/2),spread=(i%2?1:-1)*rank*3.8;
+      const p=add(add(center,mul(basis[0],spread)),mul(basis[2],-rank*3.2+Math.sin(t+i)*.45));
+      p[1]+=.55*Math.sin(t*1.1+i*2);
+      draw(models.gull,p,basis);
+    }
+  }
+}
+function render(){gl.viewport(0,0,scene.width,scene.height);gl.disable(gl.DEPTH_TEST);gl.clear(gl.DEPTH_BUFFER_BIT);gl.useProgram(skyP);shared(su);gl.bindVertexArray(null);gl.drawArrays(gl.TRIANGLES,0,3);gl.enable(gl.DEPTH_TEST);gl.useProgram(meshP);shared(mu);drawIslands();drawBoats();drawBirds();
 let a=player,b=frame(a.h,a.pitch,a.b);
 if(camMode!==2||state==='brief'){
-  draw(models['J-10C'],a.p,b);
-  draw(models.spark,add(a.p,mul(b[2],-6.6)),b,[.39,.39,.49+.035*Math.sin(t*47)]);
+  draw(models[fighter],a.p,b);
+  const twinEngine=fighter==='MiG-29';
+  for(const x of twinEngine?[-.87,.87]:[0]){
+  const origin=twinEngine?add(add(a.p,mul(b[0],x)),mul(b[1],-.16)):a.p;
+  draw(models.spark,add(origin,mul(b[2],-6.6)),b,[.39,.39,.49+.035*Math.sin(t*47)]);
   if(a.burner>.015){
     const glow=a.burner,reach=glow*(1+.035*Math.sin(t*38));
     gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.depthMask(false);
-    draw(models.exhaust,add(a.p,mul(b[2],-6.49)),b,[.7+.3*glow,.7+.3*glow,reach]);
+    draw(models.exhaust,add(origin,mul(b[2],-6.49)),b,[.7+.3*glow,.7+.3*glow,reach]);
     gl.depthMask(true);gl.disable(gl.BLEND);
+  }
   }
 }
 if(state==='brief')return;draw(models['J-10C'],wingman,b);for(let e of enemies){if(e.hp<=0)continue;let [x,y,z]=coords(e.p);if(z< -12||Math.abs(x)>Math.max(0,z)*zoom[0]+16||Math.abs(y)>Math.max(0,z)*zoom[1]+16)continue;
@@ -694,7 +759,7 @@ function healthBar(x,y,w,h,hp,maximum){
   ctx.fillStyle=remaining>.6?'#86e8ac':remaining>.3?'#ffcf72':'#ff7f71';ctx.fillRect(x,y,w*remaining,h);
 }
 function drawHud(){ctx.clearRect(0,0,W,H);if(state!=='play')return;ctx.save();ctx.shadowColor='#061d21';ctx.shadowBlur=3;ctx.lineWidth=1.3;ctx.strokeStyle=green;let a=player,mx=W/2,my=H/2,small=W<710,heading=(Math.round(a.h*180/PI)+360)%360;
-text2('LEVEL '+level+'/'+campaign.length+'   /   J-10C',16,25,'#ecfff1');text2((stage+1)+'/3  '+stages[stage][0],16,44);text2('HULL '+a.hp+'%    '+score+' PTS',16,62);healthBar(16,68,112,5,a.hp,100);if(a.hp<100&&elapsed>=a.repairFrom)text2('REPAIRING',134,73,green,'left',10);let compassY=small?86:28;text2(String(heading).padStart(3,'0')+'°',mx,compassY,green,'center');for(let i=-4;i<=4;i++)if(i)line(mx+i*15,compassY-5,mx+i*15,compassY-(i%2?9:13));
+text2('LEVEL '+level+'/'+campaign.length+'   /   '+fighter,16,25,'#ecfff1');text2((stage+1)+'/3  '+stages[stage][0],16,44);text2('HULL '+a.hp+'%    '+score+' PTS',16,62);healthBar(16,68,112,5,a.hp,100);if(a.hp<100&&elapsed>=a.repairFrom)text2('REPAIRING',134,73,green,'left',10);let compassY=small?86:28;text2(String(heading).padStart(3,'0')+'°',mx,compassY,green,'center');for(let i=-4;i<=4;i++)if(i)line(mx+i*15,compassY-5,mx+i*15,compassY-(i%2?9:13));
 let selectedContact=active();
 if(selectedContact){
   const cue=navCue(a.p,a.h,selectedContact.p);

@@ -1,8 +1,42 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Operation Bengal Shield</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0a1a20;color:#f6f6eb;font:15px system-ui,sans-serif;overflow:hidden}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}#hud{pointer-events:none}button,select,input{font:inherit}button,select{background:#123037;color:white;border:1px solid #72918b;padding:9px 13px;border-radius:3px;cursor:pointer}button:hover,button:focus-visible{background:#315449}#menu{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(90deg,#06151de6,transparent 76%),linear-gradient(0deg,#06151def,transparent 45%);padding:clamp(20px,5vw,80px);overflow:auto}article{max-width:620px}small,.micro{font:600 11px/1.6 ui-monospace,monospace;letter-spacing:.14em;color:#a6d9c4}h1{margin:.14em 0;font:900 clamp(40px,7vw,100px)/.91 system-ui;letter-spacing:-.075em;text-transform:uppercase}p{max-width:50ch;line-height:1.5;color:#e0ebe7}.go{background:#c2f195;color:#14271d;font-weight:750;padding:13px 23px;border:0}.go:hover{background:#dbffb9}summary{cursor:pointer;color:#c2dfcf}details{margin:14px 0;line-height:1.6}label{display:inline-flex;align-items:center;gap:7px}input{width:80px;accent-color:#b8ee99}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px}.hidden,[hidden]{display:none!important}#pause{position:absolute;top:15px;right:16px}#touch{position:absolute;inset:auto 12px 14px;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}#touch>*{pointer-events:auto}#pad{width:102px;height:102px;border:1px solid #c9ffda88;border-radius:50%;background:#19312c77;display:grid;place-items:center;touch-action:none}#nub{display:block;width:30px;height:30px;border-radius:50%;background:#c6ecc6aa}.grid{display:grid;grid-template-columns:repeat(3,auto);gap:5px}.grid button{touch-action:none;background:#14352bc9;font-size:12px}#scene{touch-action:none}@media(max-height:540px){#menu{align-items:safe flex-end;padding:14px 24px}h1{font-size:38px}details,.row,p{margin:6px 0}article{max-width:560px}}
-</style><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button></div></div>
-<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal<br>Shield</h1><p id="brief">Fly the J-10C over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label><details id="guide" open><summary>Flight controls</summary><div class="micro">MOVE MOUSE TO STEER　 ·　 CENTER TO LEVEL<br>↑ / ↓　CLIMB / DESCEND　 ·　 ← / →　TURN<br>W / S　NOSE DOWN / UP　 ·　 A / D　TURN　 ·　 Q / E　FINE YAW<br>RELEASE TO LEVEL OUT<br>SHIFT　BOOST　 ·　 CTRL　BRAKE　 ·　 MIDDLE DRAG　LOOK<br>LEFT CLICK / SPACE　GUN　 ·　 RIGHT CLICK / F　MISSILE　 ·　 R　TARGET<br>C　VIEW　 ·　 TAB　RADAR　 ·　 ESC　PAUSE</div></details><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article></section>
+#menu{display:block;padding:clamp(18px,4vw,62px);background:linear-gradient(90deg,#081b20ed,#0d242b56 52%,#091920a8)}
+#menu article{max-width:none;margin:0 0 20px}#menu h1{font-size:clamp(44px,6.6vw,94px)}
+#guide{color:#edf5ef;background:#092027ed;border:1px solid #94b7a65c;border-radius:6px;padding:18px 22px;box-shadow:0 8px 32px #03131751}
+#guide h2{font-size:clamp(22px,2.3vw,32px);margin:0;letter-spacing:-.04em}
+.quick{padding-left:1.4em;line-height:1.46;margin:12px 0 18px}.quick li{padding:2px 0 3px 4px}.quick li::marker{color:#b7e699;font-weight:bold}
+#guide details{margin:0;border-top:1px solid #78958855}#guide summary{font-weight:650;padding:9px 0;color:#d5ecd5}
+#guide dl{display:grid;grid-template-columns:minmax(94px,auto) 1fr;gap:6px 12px;margin:3px 0 15px;font-size:14px;line-height:1.4}#guide dt{color:#b9dfad;font-weight:650}#guide dd{margin:0}
+#guide p{margin:4px 0 12px;font-size:14px}
+@media(min-width:880px){#menu{display:grid;grid-template-columns:minmax(290px,1fr) minmax(410px,500px);align-items:center;gap:5vw}#guide{max-height:83vh;overflow:auto;scrollbar-color:#638375 #122a30}}
+@media(max-width:879px){#menu{padding:18px}#guide{padding:15px}#menu h1 br{display:none}#menu h1 br:after{content:' '}}
+</style><canvas id="scene"></canvas><canvas id="hud"></canvas><button id="pause" hidden aria-label="Pause">Ⅱ</button><div id="touch" hidden><div id="pad"><i id="nub"></i></div><div class="grid"><button data-key="KeyC">View</button><button data-key="Tab">Radar</button><button data-key="KeyR">Target</button><button data-key="ShiftLeft">Boost</button><button data-key="Space">Gun</button><button data-key="KeyF">Missile</button><button data-key="KeyX" style="grid-column:1/-1">Flare</button></div></div>
+<section id="menu"><article><small id="kicker">BAY OF BENGAL　 /　 AIR PATROL 01</small><h1 id="title">Bengal <br>Shield</h1><p id="brief">Fly the J-10C over the island chain. Intercept the fighter patrol, clear the support flight, then silence the two island installations.</p><label id="levelRow" hidden>Campaign level <select id="levelPick" aria-label="Campaign level"></select></label><div class="row"><button class="go" id="launch">Launch sortie　→</button><button id="restart" hidden>Restart</button><label>Quality <select id="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div><div class="row"><label>Volume <input id="volume" type="range" min="0" max="100" value="30"></label><button id="mute">Mute</button></div></article><aside id="guide" aria-labelledby="helpTitle">
+<h2 id="helpTitle">How to play</h2>
+<ol class="quick">
+<li><strong>Fly.</strong> <span id="firstSteer">Move the mouse to steer. Bring it back to the center to level out.</span></li>
+<li><strong>Find a contact.</strong> Follow the amber marker. If it leaves the screen, follow the turn and altitude cues.</li>
+<li><strong>Engage.</strong> <span id="firstFire">Hold left-click for the cannon. Keep the marked contact near the reticle until the lock ring fills, then right-click for a missile.</span></li>
+</ol>
+<details id="desktopHelp" open><summary>Mouse &amp; keyboard</summary><dl>
+<dt>Mouse</dt><dd>Steer in any direction. Farther from center gives a stronger response. The jet banks into turns. Hard turns and climbs cost speed, while leveling out or descending helps recover it. At full boost, allow room for a wider turn.</dd>
+<dt>Arrow keys</dt><dd>↑ climb, ↓ descend, ← turn left, → turn right. Release to level out when the pointer is centered.</dd>
+<dt>W / S · A / D</dt><dd>W lowers the nose, S raises it. A and D turn left and right.</dd>
+<dt>Q / E</dt><dd>Make a small left or right heading correction.</dd>
+<dt>Shift / Ctrl</dt><dd>Hold Shift to accelerate to 2,170 km/h in boost. Release to return to cruise, or hold Ctrl for the airbrake.</dd>
+<dt>Left-click / Space</dt><dd>Fire the cannon. Hold for continuous fire.</dd>
+<dt>Right-click / F</dt><dd>Launch one missile with a full target lock.</dd>
+<dt>X</dt><dd>Release a flare burst to divert one incoming missile. The system recharges in 8 seconds of flight.</dd>
+<dt>R / Tab</dt><dd>R selects the next contact. Tab cycles compact radar, expanded radar, and radar off.</dd>
+<dt>C / Middle drag</dt><dd>C cycles chase, close chase, cockpit, target, and missile views. Hold the middle mouse button and drag to look around in chase view.</dd>
+<dt>Esc / Ⅱ</dt><dd>Pause to read this guide, adjust settings, restart the level, or resume.</dd>
+</dl></details>
+<details id="touchHelp"><summary>Touch controls</summary><p>Push the left stick up to climb, down to descend, or sideways to turn. Release to level out. Hold <b>Boost</b> to accelerate to 2,170 km/h or <b>Gun</b> to fire. Tap <b>Target</b> to select a contact and <b>Missile</b> once the lock ring fills.</p><p>Tap <b>Flare</b> during an incoming warning to divert one missile. Tap <b>View</b> to switch cameras, <b>Radar</b> to change radar size or hide it, and <b>Ⅱ</b> to pause. Drag on open sky to look around in chase view.</p></details>
+<details><summary>Radar, target lock &amp; ammunition</summary><p>Your jet is the triangle at the radar center. Green marks your wingman, amber marks your selected enemy, and pink marks other enemies. The compass shows heading, speed is in km/h, and altitude is in meters.</p><p>Bring the selected contact within <b>1,250 m</b> and keep it near the nose until the ring fills and the lock tone sounds. The cannon can fire at any time while rounds remain.</p><p>You start with <b>120 rounds and 6 missiles</b>. Every 12 seconds of flight restores up to 35 rounds and one missile. Clearing either of the first two phases adds up to two missiles, capped at six.</p></details>
+<details><summary>Health, warnings &amp; repair</summary><p><b>HULL</b> shows your health percentage. The bar and HP count beside each visible enemy show its remaining health. <b>LAUNCHING</b> signals an enemy attack. The incoming alarm pulses faster as a missile gets closer.</p><p>After eight seconds without damage, <b>REPAIRING</b> appears. You recover one hull point every two seconds, up to 100%. A new hit restarts the delay. Climb when the terrain warning appears. Hitting the ground or water, or reaching zero hull, ends the sortie.</p></details>
+<details><summary>Levels, scoring &amp; settings</summary><p>Clear all contacts in three phases per level: fighters, a support flight, then island installations. Finish a level to unlock the next of six. You can retry after defeat or replay an unlocked level. Progress saves in this browser when local storage is available.</p><p>Aircraft are worth 500 points each and ground installations 400. Completing a level earns five bonus points per remaining hull point. Each new attempt starts with full hull and ammunition.</p><p>Choose <b>Low</b>, <b>Medium</b>, or <b>High</b> graphics quality before launch or while paused. Use <b>Volume</b> or <b>Mute</b> to adjust sound.</p></details>
+</aside></section>
 <script>
 'use strict';
 const $=id=>document.getElementById(id),scene=$('scene'),hud=$('hud'),ctx=hud.getContext('2d'),gl=scene.getContext('webgl2',{antialias:true,alpha:false});
@@ -38,8 +72,16 @@ void main(){vec3 d=normalize(cam*vec3(q*lens,1.)),c=sky(d);
 if(d.y>.012){vec2 uv=(eye.xz+d.xz*((1200.-eye.y)/max(.015,d.y)))*.0014+vec2(t*.008,0);float a=noise(uv)*.55+noise(uv*2.1)*.28+noise(uv*4.4)*.13+noise(uv*9.)*.04;c=mix(c,mix(vec3(.65,.72,.75),vec3(1.6,1.55,1.36),smoothstep(.46,.68,a)),smoothstep(.47,.65,a)*smoothstep(.012,.16,d.y));}
 if(d.y<0.){float dist=-eye.y/min(-.0001,d.y);vec2 p=(eye.xz+d.xz*dist);c=mix(ocean(p,d),sky(vec3(d.x,0,d.z)),1.-exp(-dist*.00020));}
 if(d.y<-.001)c*=shadow(eye+d*(-eye.y/d.y));o=vec4(grade(c),1);}`);
-const meshP=program(`layout(location=0) in vec3 a;layout(location=1) in vec3 n;layout(location=2) in vec3 col;layout(location=3) in float mat;uniform float t;uniform mat3 cam,rot;uniform vec3 eye,pos,scale;uniform vec2 lens;out vec3 w,N,C,L;flat out float M;void main(){L=a;w=pos+rot*(a*scale);if(mat==4.)w.y=max(0.,w.y);if(mat==7.)w.x+=.15*sin(w.z*.17+t*1.55)*cos(w.x*.08+t*.49);N=normalize(rot*(n/scale));C=col;M=mat;vec3 v=transpose(cam)*(w-eye);gl_Position=vec4(v.xy/lens,v.z*1.00002-.2,v.z);}`,`in vec3 w,N,C,L;flat in float M;out vec4 o;uniform vec3 eye;`+atmosphere+`
-void main(){vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0.):vec3(0.))),v=normalize(eye-w),s=sun(),r=reflect(-v,n);float nv=abs(dot(n,v)),rough=M==2.?.12:M==1.?.32:.7,fr=pow(1.-nv,5.);vec3 c=C*(.43+.83*max(dot(n,s),0.)+.14*n.y)+sky(r)*(.035+fr*.14)+vec3(pow(max(dot(reflect(-s,n),v),0.),2./(rough*rough)))*(.12+.55*(1.-rough));if(M==2.)c=mix(c,sky(r),.38+.45*fr);if(M==3.)c=C*2.;if(M==5.||M==7.){
+const meshP=program(`layout(location=0) in vec3 a;layout(location=1) in vec3 n;layout(location=2) in vec3 col;layout(location=3) in float mat;layout(location=4) in vec4 planting;uniform bool planted;uniform float t;uniform mat3 cam,rot;uniform vec3 eye,pos,scale;uniform vec2 lens;out vec3 w,N,C,L;flat out float M;void main(){L=a;vec3 vertex=a,normal=n;
+if(planted){float angle=planting.x*.67+planting.z*.31;mat2 spin=mat2(cos(angle),sin(angle),-sin(angle),cos(angle));vertex.xz=spin*vertex.xz;normal.xz=spin*normal.xz;vertex=vertex*planting.w+planting.xyz;}
+w=pos+rot*(vertex*scale);if(mat==4.)w.y=max(0.,w.y);if(mat==7.)w.x+=.15*sin(w.z*.17+t*1.55)*cos(w.x*.08+t*.49);N=normalize(rot*(normal/scale));C=col;M=mat;vec3 v=transpose(cam)*(w-eye);gl_Position=vec4(v.xy/lens,v.z*1.00002-.2,v.z);}`,`in vec3 w,N,C,L;flat in float M;out vec4 o;uniform vec3 eye;`+atmosphere+`
+void main(){if(M==8.){
+  float axial=clamp(-L.z/2.8,0.,1.);
+  float cells=pow(.5+.5*cos(axial*24.-.20*sin(t*37.)),3.);
+  vec3 flame=mix(vec3(.35,.56,1.),vec3(.90,.40,.22),axial);
+  flame=mix(flame,vec3(.83,.85,1.),cells*.60);
+  o=vec4(flame,(1.-axial)*(.20+.30*cells));return;
+}vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0.):vec3(0.))),v=normalize(eye-w),s=sun(),r=reflect(-v,n);float nv=abs(dot(n,v)),rough=M==2.?.12:M==1.?.32:.7,fr=pow(1.-nv,5.);vec3 c=C*(.43+.83*max(dot(n,s),0.)+.14*n.y)+sky(r)*(.035+fr*.14)+vec3(pow(max(dot(reflect(-s,n),v),0.),2./(rough*rough)))*(.12+.55*(1.-rough));if(M==2.)c=mix(c,sky(r),.38+.45*fr);if(M==3.)c=C*2.;if(M==5.||M==7.){
   vec2 uv=vec2(w.x+.55*w.z,w.y-.45*w.z);
   float clusters=noise(uv*1.15)*.65+noise(uv*3.)*.35;
   float rim=abs(dot(n,v)),detail=1.-smoothstep(240.,650.,distance(w,eye));
@@ -70,7 +112,7 @@ void main(){vec3 n=normalize(N+(M==1.?vec3(.009*sin(L.z*35.),.006*cos(L.x*39.),0
     c=mix(c,vec3(.91,.98,.92),foam);
   }
 }if(M==1.){float seam=abs(fract((L.z+.31)*.62)-.5);c*=1.-.15*(1.-smoothstep(.004,.023,seam));}c=mix(sky(normalize(w-eye)),c,exp(-length(w-eye)*.00019));o=vec4(grade(c),1);}`);
-const su=uniforms(skyP,'cam eye lens t plane'),mu=uniforms(meshP,'cam eye lens t plane rot pos scale');
+const su=uniforms(skyP,'cam eye lens t plane'),mu=uniforms(meshP,'cam eye lens t plane rot pos scale planted');
 let verts=[];
 function tri(a,b,c,color,m=0,normals){let normal=unit(cross(sub(b,a),sub(c,a)));[a,b,c].forEach((v,i)=>verts.push(...v,...(normals?normals[i]:normal),...color,m))}
 function mesh(build){verts=[];build();let vao=gl.createVertexArray(),buf=gl.createBuffer();gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(verts),gl.STATIC_DRAW);[3,3,3,1].forEach((size,i)=>{gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,size,gl.FLOAT,false,40,i*12)});return {vao,count:verts.length/10}}
@@ -93,6 +135,7 @@ models.Helicopter=mesh(()=>{hull([[-6,.5,.09,.16],[-2,.25,.3,.31],[0,0,.92,1],[2
 models.rotor=mesh(()=>{box(0,0,0,5.4,.035,.15,dark);box(0,.04,0,.15,.035,5.4,dark)});
 models.Radar=mesh(()=>{box(0,1,0,3.4,1,3,dark);box(0,4,0,.45,3,.45,paint);for(let i=-4;i<=4;i++)box(i*.75,7,-i*i*.055,.34,1.5-Math.abs(i)*.15,.09,light)});
 models.Battery=mesh(()=>{box(0,1,0,2.8,1,3.7,dark);for(let x of [-1.6,0,1.6])hull([[-3,1.6,.6,.6],[2.8,3.4,.6,.6],[3.4,3.6,.08,.08]],paint,1,x)});
+models.exhaust=mesh(()=>hull([[-2.8,0,.012,.012],[-1.65,0,.17,.17],[-1.06,0,.19,.19],[-.64,0,.28,.28],[-.22,0,.31,.31],[0,0,.39,.39]],[.48,.34,.78],8,0,20));
 models.spark=mesh(()=>{let a=[0,0,1],b=[0,0,-1];for(let i=0;i<6;i++){let p=k=>[Math.cos(k*TAU/6),Math.sin(k*TAU/6),0];tri(a,p(i),p(i+1),hot,3);tri(b,p(i+1),p(i),hot,3)}});
 models.rocket=mesh(()=>{
   hull([[-1.55,0,.12,.12],[-1.38,0,.18,.18],[.90,0,.18,.18],[1.58,0,.015,.015]],[.83,.84,.79],1,0,12);
@@ -180,13 +223,73 @@ const groves=islands.map(is=>mesh(()=>{
     }
   }
 }));
+// Reuse three plant meshes so dense groves do not duplicate geometry.
+const plants=[mesh(()=>palm(0,0,0,1)),mesh(()=>canopy(0,0,0,1)),mesh(()=>{
+  for(let i=0;i<10;i++){
+    const angle=i*2.40,front=[Math.cos(angle),0,Math.sin(angle)],across=[-front[2],0,front[0]];
+    const tip=add(mul(front,.86),[0,.48+.23*Math.sin(i),0]),ridge=add(mul(front,.44),[0,.68,0]);
+    for(let sign of [-1,1]){const edge=add(ridge,add(mul(across,.145*sign),[0,-.12,0]));const col=sign>0?[.12,.33,.057]:[.039,.19,.065];tri([0,0,0],ridge,edge,col,7);tri(edge,ridge,tip,col,7)}
+  }
+})];
+const jungle=islands.map(is=>{
+  const [cx,cz,rx,rz]=is,groups=[[],[],[]];
+  for(let i=0;i<Math.min(1600,Math.ceil(rx*rz/48));i++){
+    const gx=cx+(sample()*2-1)*rx,gz=cz+(sample()*2-1)*rz;
+    for(let j=0;j<4;j++){
+      let x=gx+(sample()-.5)*32,z=gz+(sample()-.5)*32,y=height(x,z,is);
+      if(y<2.6||Math.hypot(x-cx,z-cz)<24||surfaceNormal(x,z,is)[1]<.73)continue;
+      let type=y<11||sample()<.17?0:1;
+      if(j===3)type=2;
+      groups[type].push(x,y-.38,z,type===0?10+sample()*11:type===1?10+sample()*12:3+sample()*3);
+    }
+  }
+  return groups.map(data=>{let buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW);return {buffer,count:data.length/4}})
+});
+function drawJungle(index,depth){
+  gl.uniform1i(mu.planted,1);gl.uniform3fv(mu.pos,[0,0,0]);gl.uniform3fv(mu.scale,[1,1,1]);gl.uniformMatrix3fv(mu.rot,false,identity.flat());
+  jungle[index].forEach(({buffer,count},type)=>{
+    if(type===2&&depth>800)return;
+    gl.bindVertexArray(plants[type].vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.enableVertexAttribArray(4);gl.vertexAttribPointer(4,4,gl.FLOAT,false,16,0);gl.vertexAttribDivisor(4,1);
+    gl.drawArraysInstanced(gl.TRIANGLES,0,plants[type].count,Math.ceil(count*[.36,.63,1][quality]));
+  });gl.uniform1i(mu.planted,0);
+}
+function boatMesh(ferry){
+  const side=ferry?[.033,.14,.20]:[.04,.25,.22],deck=[.42,.29,.16],cream=[.84,.78,.57];
+  const sections=[[-9,1.6],[-6,2.6],[2.8,2.7],[6.2,1.8],[9,.04]];
+  for(let i=1;i<sections.length;i++){
+    const [z,w]=sections[i-1],[Z,W]=sections[i];
+    for(let sign of [-1,1]){let a=[w*sign,1.42,z],b=[W*sign,1.42,Z],c=[W*.58*sign,-.5,Z],d=[w*.58*sign,-.5,z];
+      tri(a,b,c,side);tri(a,c,d,side);tri([0,1.42,z],a,b,deck,0,[up,up,up]);tri([0,1.42,z],b,[0,1.42,Z],deck,0,[up,up,up])}
+  }
+  box(0,.65,-9,1.6,.72,.09,side);box(0,2.22,ferry?0:-3.5,1.88,.81,ferry?5.8:2.45,cream);
+  box(0,3.18,ferry?0:-3.5,2.05,.15,ferry?6:2.65,ferry?[.7,.26,.09]:[.07,.37,.40]);
+  for(let side of [-1,1])for(let z=ferry?-4.7:-4.6;z<(ferry?5:-2);z+=1.5)box(side*1.90,2.4,z,.04,.37,.51,[.032,.11,.14]);
+  if(ferry){box(0,3.84,2,1.25,.54,1.45,cream);box(0,4.01,3.46,1.05,.23,.04,dark)}
+  else{box(0,4.18,1.7,.08,2.8,.08,deck);box(0,6.28,1.7,2.28,.07,.07,deck);for(let x of [-1,1])box(x,1.85,4.15,.62,.42,.75,[.56,.32,.092])}
+}
+const watercraft=[mesh(()=>boatMesh(false)),mesh(()=>boatMesh(true))];
+const wake=mesh(()=>{
+  for(let side of [-1,1])for(let i=0;i<19;i++){
+    let z=-7-i*1.6,x=side*(1.3+i*.39);let a=[x,.16,z],b=[x+side*(.7+.3*Math.sin(i)),.16,z-.55],c=[x+side*.55,.16,z-1.55];tri(a,b,c,[.42,.71,.68],0,[up,up,up])
+  }
+});
+const seaRoutes=[[12,240,46,31,.053,0],[122,494,66,41,.038,1],[-650,500,83,52,.037,0],[150,970,65,75,.036,1],[970,750,65,49,.046,0]];
+function drawBoats(){
+  for(let i=0;i<seaRoutes.length;i++){
+    const [cx,cz,rx,rz,rate,type]=seaRoutes[i],a=t*rate+i*1.72;
+    const p=[cx+rx*Math.cos(a),.16*Math.sin(t*1.47+i),cz+rz*Math.sin(a)],heading=Math.atan2(-rx*Math.sin(a),rz*Math.cos(a));
+    const [x,y,z]=coords(p);if(z< -45||z>2900||Math.abs(x)>Math.max(0,z)*zoom[0]+55)continue;
+    const size=type?1.55:1;draw(wake,[p[0],.08,p[2]],frame(heading,0,0),[size,1,size]);
+    draw(watercraft[type],p,frame(heading,.014*Math.sin(t*1.18+i),.029*Math.sin(t*.94+i)),[size,size,size]);
+  }
+}
 function drawIslands(){
   for(let i=0;i<islands.length;i++){
     const [x,z,rx,rz,h]=islands[i],r=Math.max(rx,rz)*1.5;
     const [side,vertical,depth]=coords([x,h*.4,z]);
     if(depth < -r || Math.abs(side)>Math.max(depth,0)*zoom[0]+r*(1+zoom[0]) || Math.abs(vertical)>Math.max(depth,0)*zoom[1]+r*(1+zoom[1]))continue;
     draw(terrainTiles[i],[0,0,0]);
-    if(depth-r<[1400,2300,3300][quality])draw(groves[i],[0,0,0]);
+    if(depth-r<[1400,2300,3300][quality]){draw(groves[i],[0,0,0]);drawJungle(i,depth-r)}
   }
 }
 const stages=[['Fighter patrol',['Rafale','Su-30']],['Support flight',['Helicopter','Drone']],['Island installations',['Radar','Battery']]],cameras=['Chase','Close chase','Cockpit','Target','Missile'],identity=frame(0,0,0),keys=new Set(),pool=Array.from({length:220},()=>({life:0}));let state='brief',stage=0,enemies=[],target=0,lock=0,score=0,elapsed=0,camMode=0,radar=1,message='',msgTime=0,t=0,shake=0,nextWave=0,shots=0,kills=0,weapon='GUN',res=1,last=0,eye=[0,0,0],axes=identity,zoom=[1,1],orbit=[0,0],drag=null,stick=[0,0],audio,master,engine,wind,muted=false,quality=1,W=1,H=1,lastWarn=0;
@@ -204,11 +307,65 @@ function noiseBurst(duration,high,low,gain,delay=0){
   source.connect(filter).connect(amp).connect(master);source.start(start,Math.random()*.4,duration);
   source.onended=()=>{source.disconnect();filter.disconnect();amp.disconnect()};
 }
+// Build the short effects once. Smooth envelopes keep the attack crisp without clicks.
+const effects={},voices=new Set();
+function makeEffect(name,duration,synth){
+  const rate=32000,buf=audio.createBuffer(1,Math.ceil(rate*duration),rate),samples=buf.getChannelData(0);
+  let bass=0,body=0,air=0,seed=367621,peak=.001;
+  for(let i=0;i<samples.length;i++){
+    const sec=i/rate;seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+    const white=seed/2147483648-1;
+    bass+=.031*(white-bass);body+=.19*(white-body);air+=.64*(white-air);
+    const edge=Math.min(1,sec/.002,(duration-sec)/.022);
+    const v=synth(sec,bass*7,(body-bass)*3,(air-body)*2,white)*edge;
+    samples[i]=v;peak=Math.max(peak,Math.abs(v));
+  }
+  for(let i=0;i<samples.length;i++)samples[i]*=.88/peak;
+  effects[name]=buf;
+}
+function buildEffects(){
+  const exp=Math.exp,sin=Math.sin;
+  function pulse(t,start,length,hz,end){
+    const x=t-start;if(x<0||x>=length)return 0;
+    const env=Math.min(1,x/.007,(length-x)/.014);
+    const phase=TAU*(hz*x+(end-hz)*x*x/(2*length));
+    return env*(sin(phase)+.13*sin(phase*2)+.055*sin(phase*3));
+  }
+  makeEffect('acquire',.10,t=>pulse(t,.004,.075,530,670));
+  makeEffect('locked',.49,t=>pulse(t,0,.115,675,850)+pulse(t,.12,.34,850,852));
+  makeEffect('warning',.235,t=>pulse(t,0,.094,1180,985)+pulse(t,.112,.109,795,785));
+  makeEffect('launch',1.34,(t,low,mid,high,w)=>{
+    const latch=(w*.36+sin(TAU*195*t)*.22)*exp(-t*97);
+    const ignition=(low*.9+mid*.69+high*.45)*exp(-t*16);
+    const exhaust=(1-exp(-t*26))*exp(-t*3.6)*(1+.18*sin(57*t+.5*sin(81*t)));
+    return latch+ignition+exhaust*(1.2*low+.74*mid+.29*high*exp(-t*4)+.13*sin(TAU*(58*t+36*(1-exp(-7*t))/7)));
+  });
+  makeEffect('impact',2.15,(t,low,mid,high,w)=>{
+    const crack=(high*.89+w*.28)*exp(-t*64);
+    const thump=sin(TAU*(40*t+48*(1-exp(-12*t))/12))*exp(-t*7);
+    const roll=(1-exp(-t*19))*exp(-t*2.85)*(1+.24*sin(24*t+.5*sin(40*t)));
+    const echo=t>.14?exp(-(t-.14)*7)*(low*.3+mid*.12):0;
+    return crack+thump*.75+low*.88*exp(-t*14)+roll*(1.05*low+.43*mid)+echo;
+  });
+}
+function playEffect(name,gain,{pan=0,endPan=pan,delay=0,cutoff=12500,endCutoff=cutoff,pitch=1}={}){
+  const buf=effects[name];if(!audio||!buf||muted||state!=='play')return;
+  const start=audio.currentTime+delay,source=audio.createBufferSource(),filter=audio.createBiquadFilter(),amp=audio.createGain(),balance=audio.createStereoPanner();
+  source.buffer=buf;source.playbackRate.value=pitch;const end=start+buf.duration/pitch;
+  filter.type='lowpass';filter.Q.value=.65;filter.frequency.setValueAtTime(cutoff,start);filter.frequency.exponentialRampToValueAtTime(endCutoff,end);
+  balance.pan.setValueAtTime(pan,start);balance.pan.linearRampToValueAtTime(endPan,end);amp.gain.value=gain;
+  source.connect(filter).connect(balance).connect(amp).connect(master);voices.add(source);
+  source.onended=()=>{voices.delete(source);source.disconnect();filter.disconnect();balance.disconnect();amp.disconnect()};source.start(start);
+}
+function missileBlast(p,gain=1){
+  const delta=sub(p,player.p),distance=len(delta),pan=.82*dot(unit(delta),frame(player.h,0,0)[0]);
+  playEffect('impact',gain/(1+distance*.003),{pan,delay:Math.min(.64,distance*.0012),cutoff:1100+11000/(1+distance*.006),endCutoff:450,pitch:.94+Math.random()*.10});
+}
 function audioStart(){
   try{
     if(!audio){
       audio=new AudioContext();master=audio.createGain();
-      const limiter=audio.createDynamicsCompressor();limiter.threshold.value=-13;limiter.ratio.value=4;master.connect(limiter).connect(audio.destination);
+      const limiter=audio.createDynamicsCompressor();limiter.threshold.value=-13;limiter.ratio.value=4;master.connect(limiter).connect(audio.destination);buildEffects();
       function tone(type,gain){
         const osc=audio.createOscillator(),amp=audio.createGain();osc.type=type;amp.gain.value=gain;osc.connect(amp).connect(master);osc.start();return osc;
       }
@@ -228,7 +385,7 @@ function audioStart(){
 function flightAudio(a,boost,dt){
   if(Number.isFinite(nearestThreat)){
     lastWarn-=dt;
-    if(lastWarn<=0){const urgency=1-clamp(nearestThreat/650,0,1);sound(830+urgency*320,.11,'sine',.24,760+urgency*320);lastWarn=.78-.53*urgency}
+    if(lastWarn<=0){const urgency=1-clamp(nearestThreat/650,0,1);playEffect('warning',.38,{pitch:.96+.13*urgency});lastWarn=.90-.59*urgency}
   }else lastWarn=0;
   if(!audio||!roarGain||audio.currentTime<nextMix)return;nextMix=audio.currentTime+.08;
   const now=audio.currentTime,thrust=clamp((a.speed-36)/97,0,1);
@@ -271,10 +428,10 @@ function completeLevel(){
   overlay('win');
 }
 function spawn(){enemies=stages[stage][1].concat(campaign[level-1].extra[stage]).map((type,i)=>{let groundObj=stage===2,is=islands[[0,1,7,8][i]],p=groundObj?[is[0],ground(is[0],is[1])+1,is[1]]:add(player.p,add(mul(frame(player.h,0,0)[2],340+i*155),mul(frame(player.h,0,0)[0],[-18,105,-105,165][i])));if(!groundObj)p[1]=player.p[1]+i*20;const maxHp=({Rafale:3,"Su-30":4,Helicopter:3,Drone:2,Radar:3,Battery:6}[type])+Math.floor((level-1)/2);return {p,home:[...p],type,h:player.h+(i?.4:-.22),b:0,hp:maxHp,maxHp,charging:0,slot:i,age:i*2,cd:(3.8+i*1.45)/(1+.09*(level-1)),groundObj}});target=0;lock=0;nextWave=0;notify('Phase '+(stage+1)+'   /   '+stages[stage][0]);}
-let cameraAnchor=null;
-function reset(){lastWarn=0;nearestThreat=Infinity;pointerFlight=null;cameraAnchor=null;player={p:[0,175,0],h:0,pitch:0,b:0,pv:0,bv:0,yv:0,speed:76,hp:100,ammo:120,missiles:6,gunCd:0,msCd:0,rearm:0};wingman=[-42,184,20];stage=score=elapsed=kills=shots=camMode=shake=0;orbit=[0,0];for(let p of pool)p.life=0;spawn();eye=add(player.p,[0,5,-22]);axes=identity;keys.clear();stick=[0,0]}
+let cameraAnchor=null,chaseRoll=0;
+function reset(){lastWarn=0;nearestThreat=Infinity;pointerFlight=null;cameraAnchor=null;chaseRoll=0;player={p:[0,175,0],h:0,pitch:0,b:0,pv:0,bv:0,yv:0,speed:76,burner:0,hp:100,repairFrom:0,repairBase:100,ammo:120,missiles:6,gunCd:0,msCd:0,flareReadyAt:0,rearm:0};wingman=[-42,184,20];stage=score=elapsed=kills=shots=camMode=shake=0;orbit=[0,0];for(let p of pool)p.life=0;spawn();eye=add(player.p,[0,5,-22]);axes=identity;keys.clear();stick=[0,0]}
 function notify(s){message=s;msgTime=3}
-function overlay(s){pointerFlight=null;mouseGun=false;drag=null;state=s;keys.clear();stick=[0,0];$('nub').style.transform='';$('menu').hidden=s==='play';$('pause').hidden=s!=='play';$('touch').hidden=!mobile||s!=='play';$('restart').hidden=s!=='paused';$('levelRow').hidden=true;
+function overlay(s){if(s!=='play')for(const voice of voices)voice.stop();pointerFlight=null;mouseGun=false;drag=null;state=s;keys.clear();stick=[0,0];$('nub').style.transform='';$('menu').hidden=s==='play';$('pause').hidden=s!=='play';$('touch').hidden=!mobile||s!=='play';$('restart').hidden=s!=='paused';$('levelRow').hidden=true;
 if(s!=='play'){
   const win=s==='win',paused=s==='paused',lastLevel=level===campaign.length;
   $('title').textContent=paused?'On hold':win?(lastLevel?'Campaign complete':'Level '+level+' clear'):'Sortie ended';
@@ -296,10 +453,31 @@ function fireGun(){
   let a=player;if(a.gunCd>0||!a.ammo)return;
   let basis=frame(a.h,a.pitch,a.b),f=basis[2],e=active(),dir=e?sub(e.p,a.p):f,alignment=e?dot(f,unit(dir)):0;
   weapon='GUN';a.ammo--;shots++;a.gunCd=.105;let aim=alignment>.982?unit(dir):f;let muzzle=add(add(a.p,mul(f,4.9)),add(mul(basis[0],-.95),mul(basis[1],-.38)));
-particle('tracer',muzzle,mul(aim,380),2.8);particle('flash',muzzle,mul(f,a.speed),.073,{size:.92});noiseBurst(.045,8200,1400,.58);noiseBurst(.105,1750,260,.38,.014);sound(152,.09,'triangle',.29,43)
+particle('tracer',muzzle,mul(aim,380+Math.max(0,a.speed-76)),2.8);particle('flash',muzzle,mul(f,a.speed),.073,{size:.92});noiseBurst(.045,8200,1400,.58);noiseBurst(.105,1750,260,.38,.014);sound(152,.09,'triangle',.29,43)
 }
-function launchMissile(){let e=active();if(player.msCd>0||!player.missiles)return;if(!e||lock<1){notify('Center the selected contact to lock');return}weapon='MSL';player.missiles--;player.msCd=.75;let f=frame(player.h,player.pitch,player.b)[2];let mount=add(add(player.p,mul(frame(player.h,player.pitch,player.b)[0],player.missiles%2?2.6:-2.6)),[0,-.55,0]);particle('missile',mount,mul(f,175),9,{target:e});particle('flash',mount,mul(f,player.speed),.12,{size:1.25});noiseBurst(.10,7600,1700,.61);noiseBurst(.85,2900,200,.76,.045);sound(210,.42,'triangle',.17,48);shots++}
-function action(code){if(code==='Escape'){if(state==='play')overlay('paused');else if(state==='paused')start();return}if(state!=='play')return;if(code==='KeyF')launchMissile();if(code==='KeyR')cycle();if(code==='KeyC'){camMode=(camMode+1)%5;notify(cameras[camMode]+' view')}if(code==='Tab')radar=(radar+1)%3}
+function launchMissile(){let e=active();if(player.msCd>0||!player.missiles)return;if(!e||lock<1){notify('Center the selected contact to lock');return}weapon='MSL';player.missiles--;player.msCd=.75;let f=frame(player.h,player.pitch,player.b)[2];let mount=add(add(player.p,mul(frame(player.h,player.pitch,player.b)[0],player.missiles%2?2.6:-2.6)),[0,-.55,0]);particle('missile',mount,mul(f,175+Math.max(0,player.speed-76)),9,{target:e,speed:210+Math.max(0,player.speed-76)});particle('flash',mount,mul(f,player.speed),.12,{size:1.25});const side=player.missiles%2?1:-1;playEffect('launch',1.24,{pan:side*.43,endPan:side*.07,cutoff:14500,endCutoff:620,pitch:.97+Math.random()*.06});shots++}
+function releaseFlares(){
+  if(state!=='play'||elapsed<player.flareReadyAt)return;
+  player.flareReadyAt=elapsed+8;
+  const [right,upAxis,forward]=frame(player.h,player.pitch,player.b);
+  const tail=add(player.p,mul(forward,-5));
+  let nearest=null,distance=Infinity;
+  for(const o of pool){
+    if(o.life<=0||o.kind!=='hostile')continue;
+    const d=len(sub(o.p,player.p));if(d<distance){nearest=o;distance=d}
+  }
+  // Arcade rule: each burst clears one active threat. Its remaining flight is a visual effect.
+  if(nearest){
+    nearest.kind='diverted';nearest.target=null;nearest.life=.62;
+    nearest.decoy=add(tail,mul(right,26));
+  }
+  for(const side of [-1,1])for(let i=0;i<3;i++){
+    const vel=add(mul(forward,player.speed*.47-i*5),add(mul(right,side*(11+i*6)),mul(upAxis,-3-i*2)));
+    particle('flare',add(tail,mul(right,side*1.2)),vel,1.45+i*.16);
+  }
+  noiseBurst(.18,5200,660,.31);notify(nearest?'Flare deployed · missile diverted':'Flares deployed');
+}
+function action(code){if(code==='Escape'){if(state==='play')overlay('paused');else if(state==='paused')start();return}if(state!=='play')return;if(code==='KeyF')launchMissile();if(code==='KeyX')releaseFlares();if(code==='KeyR')cycle();if(code==='KeyC'){camMode=(camMode+1)%5;notify(cameras[camMode]+' view')}if(code==='Tab')radar=(radar+1)%3}
 window.onkeydown=e=>{if(state==='play'||e.code==='Escape'){e.preventDefault();if(!e.repeat)action(e.code);keys.add(e.code)}};window.onkeyup=e=>keys.delete(e.code);
 for(let btn of document.querySelectorAll('[data-key]')){btn.onpointerdown=e=>{e.preventDefault();btn.setPointerCapture(e.pointerId);keys.add(btn.dataset.key);action(btn.dataset.key)};btn.onlostpointercapture=()=>keys.delete(btn.dataset.key)}
 const pad=$('pad');function steer(e){let b=pad.getBoundingClientRect(),x=(e.clientX-b.left-b.width/2)/40,y=(e.clientY-b.top-b.height/2)/40;let radius=Math.hypot(x,y),travel=clamp((radius-.10)/.90,0,1);
@@ -344,27 +522,51 @@ function explode(p,big,blast=big){
     particle('spark',p,v,.22+Math.random()*(big?.94:.33));
     if(i%3===0)particle('smoke',p,add(mul(v,.25),[0,3,0]),.55+Math.random()*1.0,{size:big?4.3:1.4});
   }
-  noiseBurst(blast||big?.83:.13,blast||big?3200:7800,blast||big?100:950,(blast||big?.85:.38)*loud);
-  sound(blast||big?107:260,blast||big?.64:.085,'triangle',(blast||big?.47:.12)*loud,blast||big?28:84);
+  if(blast||big)missileBlast(p,big?1.65:1.18);
+  else{noiseBurst(.13,7800,950,.38*loud);sound(260,.085,'triangle',.12*loud,84)}
   shake=Math.max(shake,(big?.54:blast?.32:.12)*loud);
 }
 function hit(e,d,point=e.p){if(e.hp<=0)return;e.hp=Math.max(0,e.hp-d);if(e.hp<=0){score+=stage===2?400:500;kills++;explode(e.p,true);if(e===enemies[target])cycle();if(!enemies.some(a=>a.hp>0))nextWave=2.3}else explode(point,false,d>1)}
-function update(dt){let a=player;elapsed+=dt;msgTime-=dt;shake=Math.max(0,shake-dt);let val=k=>keys.has(k)?1:0,boost=val('ShiftLeft')||val('ShiftRight'),brake=val('ControlLeft')||val('ControlRight');a.speed+=( (boost?133:brake?36:76)-a.speed)*dt*.48;const agility=clamp(1.13-Math.abs(a.speed-75)/185,.68,1.13);
+const repairDelay=8, secondsPerHullPoint=2;
+function repairHull(a){
+  if(a.hp<=0||a.hp>=100||elapsed<a.repairFrom)return;
+  const restored=Math.floor((elapsed-a.repairFrom+1e-8)/secondsPerHullPoint);
+  a.hp=Math.min(100,a.repairBase+restored);
+}
+const boostSpeed=2170/3.6;
+function updateThrust(a,boost,brake,dt){
+  a.burner+=((boost?1:0)-a.burner)*(1-Math.exp(-dt*(boost?5:3.6)));
+  const turnLoad=Math.sin(a.b)**2;
+  const climbLoad=Math.sin(a.pitch);
+  const energyCost=16*turnLoad+18*climbLoad;
+  if(boost){a.speed=Math.min(boostSpeed,a.speed+dt*(135-energyCost));return}
+  const goal=brake?36:clamp(76-energyCost/.53,35,106);
+  a.speed=goal+(a.speed-goal)*Math.exp(-dt*(brake?1.25:.53));
+}
+function update(dt){let a=player;elapsed+=dt;msgTime-=dt;shake=Math.max(0,shake-dt);let val=k=>keys.has(k)?1:0,boost=val('ShiftLeft')||val('ShiftRight'),brake=val('ControlLeft')||val('ControlRight');updateThrust(a,boost,brake,dt);const authority=clamp((a.speed-28)/38,.30,1);
+const agility=authority/(1+Math.max(0,a.speed-90)/310);
 const axis=(positive,negative)=>Number(positive.some(k=>keys.has(k)))-Number(negative.some(k=>keys.has(k)));
 const turn=axis(['KeyD','ArrowRight'],['KeyA','ArrowLeft'])||stick[0]||(pointerFlight?pointerAxis(pointerFlight[0]-W/2,W/2):0);
 const lift=axis(['KeyS','ArrowUp'],['KeyW','ArrowDown'])||-stick[1]||(pointerFlight?pointerAxis(H/2-pointerFlight[1],H/2):0);
 // Demand an attitude instead of accumulating roll or pitch indefinitely.
 const ease=(current,goal,rate)=>goal+(current-goal)*Math.exp(-rate*dt);
-a.b=ease(a.b,turn*.94,turn?3.1:3.8);
-a.pitch=ease(a.pitch,lift*.72,lift?1.85:2.55);
+// Critically damped roll lets the jet reverse through level without an abrupt snap.
+const bankGoal=turn*1.12,offset=a.b-bankGoal,rate=turn?7.8:9;
+const rollDecay=Math.exp(-rate*dt),slope=a.bv+rate*offset;
+a.b=bankGoal+(offset+slope*dt)*rollDecay;
+a.bv=(a.bv-rate*slope*dt)*rollDecay;
+a.pitch=ease(a.pitch,lift*.79*authority,lift?2.35:3.2);
 const yaw=axis(['KeyE'],['KeyQ']);
-a.yv=ease(a.yv,(Math.sin(a.b)*1.13+yaw*.42)*agility,4.4);
+a.yv=ease(a.yv,(Math.sin(a.b)*1.42+yaw*.42)*agility,5.6);
 a.h=wrap(a.h+a.yv*dt);
 let basis=frame(a.h,a.pitch,a.b),f=basis[2];a.p=add(a.p,mul(f,a.speed*dt));
 wingman=mix(wingman,add(add(a.p,mul(basis[0],-48)),add(mul(f,26),[0,9,0])),1-Math.exp(-dt*1.8));trailClock-=dt;if(a.p[1]>390&&trailClock<=0){for(let side of [-1,1])particle('smoke',add(add(a.p,mul(basis[0],side*4.5)),mul(f,-3)),[0,.5,0],1.4);trailClock=.09}
-if(a.p[1]<=ground(a.p[0],a.p[2])+2||a.hp<=0){overlay('lose');return}if(a.p[1]>1750)a.pitch-=dt*.40;
+if(a.p[1]<=ground(a.p[0],a.p[2])+2||a.hp<=0){overlay('lose');return}repairHull(a);if(a.p[1]>1750)a.pitch-=dt*.40;
 a.gunCd-=dt;a.msCd-=dt;a.rearm+=dt;if(a.rearm>12){a.rearm=0;a.ammo=Math.min(120,a.ammo+35);a.missiles=Math.min(6,a.missiles+1)}
-let e=active(),dir=e?sub(e.p,a.p):[0,0,0],range=len(dir),alignment=e?dot(f,unit(dir)):0;let old=lock;lock=alignment>.88&&range<1250?Math.min(1,lock+dt*1.45):Math.max(0,lock-dt*1.8);if(lock===1&&old<1)sound(970,.14);
+let e=active(),dir=e?sub(e.p,a.p):[0,0,0],range=len(dir),alignment=e?dot(f,unit(dir)):0;let old=lock;lock=alignment>.88&&range<1250?Math.min(1,lock+dt*1.45):Math.max(0,lock-dt*1.8);if(!Number.isFinite(nearestThreat)){
+  if(lock===1&&old<1)playEffect('locked',.22);
+  else if(lock>old&&[.17,.55].some(step=>old<step&&lock>=step))playEffect('acquire',.13,{pitch:.9+lock*.40});
+}
 if(mouseGun||keys.has('Space'))fireGun();
 for(let en of enemies){if(en.hp<=0)continue;en.age+=dt;let rel=sub(a.p,en.p),dist=len(rel);if(!en.groundObj){let rotor=en.type==='Helicopter',drone=en.type==='Drone',spd=rotor?18:drone?57:en.type==='Su-30'?61:70;let fighter=!rotor&&!drone,side=en.slot%2?-1:1,bearing=Math.atan2(rel[0],rel[2]);
 let desired=bearing+side*(dist<165?1.85:dist<400?.58:.12)+.24*Math.sin(en.age*.84);
@@ -379,20 +581,30 @@ if(en.charging>0){
     const speed=(sam?174:145)+level*2;
     particle('hostile',add(en.p,[0,sam?9:2,0]),mul(unit(rel),speed),sam?11:8,{target:a,speed,damage:(sam?30:22)+level-1});
     en.cd=(sam?6.8:7.9)/(1+.10*(level-1))+.25*en.slot;
-    notify(sam?'SAM launch':'Enemy missile launch');noiseBurst(.32,2400,300,.18/(1+dist*.003));
+    notify(sam?'SAM launch':'Enemy missile launch');playEffect('launch',.76/(1+dist*.004),{pan:-.75*dot(unit(rel),frame(a.h,0,0)[0]),cutoff:2700,endCutoff:450});
   }
 }else if((en.cd-=dt)<=0){
   if(en.type==='Radar'){en.cd=6;notify('Island radar sweep');sound(620,.12)}
   else{en.charging=sam?1.5:1.0;notify(sam?'SAM charging':'Enemy preparing attack');sound(540,.10,'triangle',.11,690)}
 }}
 nearestThreat=Infinity;
-for(let o of pool){if(o.life<=0)continue;o.life-=dt;if(o.life<=0)continue;let prev=o.p,host=o.kind==='hostile',ms=o.kind==='missile';if(ms||host){if(o.target?.hp>0){let d=unit(sub(o.target.p,o.p));o.vel=mul(unit(mix(unit(o.vel),d,Math.min(1,dt*(host?1.5:3.5)))),host?o.speed:210)}o.trail-=dt;if(o.trail<=0){particle('smoke',o.p,[.55,1.3,0],1.05,{size:1.35});o.trail=quality===0?.074:.039}}
+for(let o of pool){if(o.life<=0)continue;o.life-=dt;if(o.life<=0)continue;if(o.kind==='flare'){
+  o.vel[1]-=dt*5;o.p=add(o.p,mul(o.vel,dt));o.trail-=dt;
+  if(o.trail<=0){particle('smoke',o.p,[0,.7,0],.65,{size:.72});particle('flash',o.p,[0,0,0],.10,{size:1.25});o.trail=.08}
+  continue;
+}
+if(o.kind==='diverted'){
+  o.p=mix(o.p,o.decoy,1-Math.exp(-dt*6));o.trail-=dt;
+  if(o.trail<=0){particle('smoke',o.p,[0,1,0],.55);o.trail=.07}
+  continue;
+}
+let prev=o.p,host=o.kind==='hostile',ms=o.kind==='missile';if(ms||host){if(o.target?.hp>0){let d=unit(sub(o.target.p,o.p));o.vel=mul(unit(mix(unit(o.vel),d,Math.min(1,dt*(host?1.5:3.5)))),o.speed)}o.trail-=dt;if(o.trail<=0){particle('smoke',o.p,[.55,1.3,0],1.05,{size:1.35});o.trail=quality===0?.074:.039}}
 o.p=add(o.p,mul(o.vel,dt));if(o.kind==='spark'){o.vel[1]-=dt*16;continue}
-if(o.kind==='smoke'||o.kind==='ring'||o.kind==='flash'||o.kind==='mist')continue;let seg=sub(o.p,prev);for(let obj of host?[a]:enemies){if(obj.hp<=0)continue;let nearest=add(prev,mul(seg,clamp(dot(sub(obj.p,prev),seg)/(dot(seg,seg)||1),0,1)));if(len(sub(nearest,obj.p))<(host?13:ms?14:10)){o.life=0;if(host){a.hp=Math.max(0,a.hp-o.damage);explode(a.p,false);notify('Airframe hit')}else hit(obj,ms?3:1,nearest);break}}
+if(o.kind==='smoke'||o.kind==='ring'||o.kind==='flash'||o.kind==='mist')continue;let seg=sub(o.p,prev);for(let obj of host?[a]:enemies){if(obj.hp<=0)continue;let nearest=add(prev,mul(seg,clamp(dot(sub(obj.p,prev),seg)/(dot(seg,seg)||1),0,1)));if(len(sub(nearest,obj.p))<(host?13:ms?14:10)){o.life=0;if(host){a.hp=Math.max(0,a.hp-o.damage);a.repairBase=a.hp;a.repairFrom=elapsed+repairDelay;explode(a.p,false,true);notify('Airframe hit')}else hit(obj,ms?3:1,nearest);break}}
 if(host&&o.life>0)nearestThreat=Math.min(nearestThreat,len(sub(a.p,o.p)));
 if(o.life>0&&o.p[1]<=ground(o.p[0],o.p[2])){o.life=0;let surface=ground(o.p[0],o.p[2]),at=[o.p[0],surface+.3,o.p[2]];
 if(surface>0)explode(at,false,ms||host);
-else{for(let n=0;n<(ms||host?8:3);n++)particle('mist',at,[(Math.random()-.5)*5,4+Math.random()*8,(Math.random()-.5)*5],.48+Math.random()*.3,{size:ms||host?2:.65});noiseBurst(.15,2300,480,.10)}}
+else{if(ms||host)missileBlast(at,.75);for(let n=0;n<(ms||host?8:3);n++)particle('mist',at,[(Math.random()-.5)*5,4+Math.random()*8,(Math.random()-.5)*5],.48+Math.random()*.3,{size:ms||host?2:.65});noiseBurst(.15,2300,480,.10)}}
 }
 if(a.hp<=0){overlay('lose');return}
 if(nextWave>0&&(nextWave-=dt)<=0){if(stage===2){score+=Math.round(a.hp*5);completeLevel()}else{stage++;a.missiles=Math.min(6,a.missiles+2);spawn()}}
@@ -401,7 +613,7 @@ flightAudio(a,boost,dt)
 function resize(){if(W!==innerWidth||H!==innerHeight)pointerFlight=null;W=innerWidth;H=innerHeight;let px=Math.min(devicePixelRatio,[1,1.4,1.8][quality])*res;scene.width=Math.max(1,Math.round(W*px));scene.height=Math.max(1,Math.round(H*px));let ratio=Math.min(devicePixelRatio,2);hud.width=W*ratio;hud.height=H*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);zoom=[.60*W/H,.60]}window.addEventListener('resize',resize);resize();
 function camera(dt){let a=player,p=a.p,basis=frame(a.h,a.pitch,a.b),f=basis[2],to,at,roll=0;
 if(state==='brief'){let angle=1.96+.14*Math.sin(t*.16),d=W<H?24:18;to=add(p,[Math.sin(angle)*d,5.0,Math.cos(angle)*d]);let dir=unit(sub(p,to)),right=unit(cross(up,dir));at=add(p,mul(right,W<H?0:-4));if(W<H)at[1]-=3.8}
-else{if(!drag){orbit[0]*=Math.exp(-dt*3);orbit[1]*=Math.exp(-dt*3)}let view=frame(a.h+orbit[0],a.pitch-orbit[1],0)[2],distance=camMode===1?14:22;to=add(add(p,mul(view,-distance)),mul(up,camMode===1?3.7:6));at=add(p,mul(f,22));roll=a.b*.26;if(camMode===2){to=add(add(p,mul(f,3)),mul(basis[1],1.85));at=add(to,mul(f,60));roll=a.b}if(camMode===3&&active()){let d=unit(sub(active().p,p));to=add(add(p,mul(d,-19)),[0,6,0]);at=active().p}if(camMode===4){let m=pool.find(o=>o.kind==='missile'&&o.life>0);if(m){to=add(add(m.p,mul(unit(m.vel),-12)),[0,3,0]);at=add(m.p,m.vel)}}}
+else{if(!drag){orbit[0]*=Math.exp(-dt*3);orbit[1]*=Math.exp(-dt*3)}let view=frame(a.h+orbit[0],a.pitch-orbit[1],0)[2],distance=(camMode===1?14:22)+3*a.burner;to=add(add(p,mul(view,-distance)),mul(up,camMode===1?3.7:6));at=add(p,mul(f,22));chaseRoll+=(a.b*.23-chaseRoll)*(1-Math.exp(-dt*5));roll=chaseRoll;if(camMode===2){to=add(add(p,mul(f,3)),mul(basis[1],1.85));at=add(to,mul(f,60));roll=a.b}if(camMode===3&&active()){let d=unit(sub(active().p,p));to=add(add(p,mul(d,-19)),[0,6,0]);at=active().p}if(camMode===4){let m=pool.find(o=>o.kind==='missile'&&o.life>0);if(m){to=add(add(m.p,mul(unit(m.vel),-12)),[0,3,0]);at=add(m.p,m.vel)}}}
 // Follow translation immediately; damp the offset so speed changes cannot pull the view back.
 if(cameraAnchor && state!=='brief' && (camMode===0||camMode===1))eye=add(eye,sub(p,cameraAnchor));
 cameraAnchor=[...p];
@@ -434,13 +646,23 @@ function drawDust(){
  gl.bindVertexArray(dustVAO);gl.bindBuffer(gl.ARRAY_BUFFER,dustBuf);gl.bufferSubData(gl.ARRAY_BUFFER,0,dustData.subarray(0,index));
  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);gl.drawArraysInstanced(gl.TRIANGLES,0,6,visible.length);gl.depthMask(true);gl.disable(gl.BLEND);
 }
-function render(){gl.viewport(0,0,scene.width,scene.height);gl.disable(gl.DEPTH_TEST);gl.clear(gl.DEPTH_BUFFER_BIT);gl.useProgram(skyP);shared(su);gl.bindVertexArray(null);gl.drawArrays(gl.TRIANGLES,0,3);gl.enable(gl.DEPTH_TEST);gl.useProgram(meshP);shared(mu);drawIslands();
-let a=player,b=frame(a.h,a.pitch,a.b),boost=keys.has('ShiftLeft')||keys.has('ShiftRight');if(camMode!==2||state==='brief'){draw(models['J-10C'],a.p,b);draw(models.spark,add(a.p,mul(b[2],-6.6)),b,[.39,.39,(boost?2.8:.52)*(.91+.1*Math.sin(t*47))])}
+function render(){gl.viewport(0,0,scene.width,scene.height);gl.disable(gl.DEPTH_TEST);gl.clear(gl.DEPTH_BUFFER_BIT);gl.useProgram(skyP);shared(su);gl.bindVertexArray(null);gl.drawArrays(gl.TRIANGLES,0,3);gl.enable(gl.DEPTH_TEST);gl.useProgram(meshP);shared(mu);drawIslands();drawBoats();
+let a=player,b=frame(a.h,a.pitch,a.b);
+if(camMode!==2||state==='brief'){
+  draw(models['J-10C'],a.p,b);
+  draw(models.spark,add(a.p,mul(b[2],-6.6)),b,[.39,.39,.49+.035*Math.sin(t*47)]);
+  if(a.burner>.015){
+    const glow=a.burner,reach=glow*(1+.035*Math.sin(t*38));
+    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.depthMask(false);
+    draw(models.exhaust,add(a.p,mul(b[2],-6.49)),b,[.7+.3*glow,.7+.3*glow,reach]);
+    gl.depthMask(true);gl.disable(gl.BLEND);
+  }
+}
 if(state==='brief')return;draw(models['J-10C'],wingman,b);for(let e of enemies){if(e.hp<=0)continue;let [x,y,z]=coords(e.p);if(z< -12||Math.abs(x)>Math.max(0,z)*zoom[0]+16||Math.abs(y)>Math.max(0,z)*zoom[1]+16)continue;
 if(z>720&&!e.groundObj){draw(models.Drone,e.p,frame(e.h,0,e.b),[1.2,1,1]);continue}draw(models[e.type],e.p,frame(e.h,0,e.b),e.groundObj?[2,2,2]:[1,1,1]);if(e.type==='Helicopter')draw(models.rotor,add(e.p,[0,1.95,0]),frame(t*35,0,0))}
 for(let o of pool){if(o.life<=0)continue;if(o.kind==='ring'){let size=2+26*(1-o.life/o.max);draw(models.ring,o.p,identity,[size,1,size]);continue}if(['smoke','mist','flash'].includes(o.kind))continue;
 let d=unit(o.vel),rot=frame(Math.atan2(d[0],d[2]),Math.asin(clamp(d[1],-1,1)),0);
-if(o.kind==='missile'||o.kind==='hostile'){
+if(o.kind==='missile'||o.kind==='hostile'||o.kind==='diverted'){
   draw(models.rocket,o.p,rot);draw(models.spark,add(o.p,mul(d,-2.1)),rot,[.19,.19,1.1+.23*Math.sin(t*68)]);continue;
 }
 let tracer=o.kind==='tracer',r=tracer?.115:.14*o.life/o.max;
@@ -464,14 +686,14 @@ function healthBar(x,y,w,h,hp,maximum){
   ctx.fillStyle=remaining>.6?'#86e8ac':remaining>.3?'#ffcf72':'#ff7f71';ctx.fillRect(x,y,w*remaining,h);
 }
 function drawHud(){ctx.clearRect(0,0,W,H);if(state!=='play')return;ctx.save();ctx.shadowColor='#061d21';ctx.shadowBlur=3;ctx.lineWidth=1.3;ctx.strokeStyle=green;let a=player,mx=W/2,my=H/2,small=W<710,heading=(Math.round(a.h*180/PI)+360)%360;
-text2('LEVEL '+level+'/'+campaign.length+'   /   J-10C',16,25,'#ecfff1');text2((stage+1)+'/3  '+stages[stage][0],16,44);text2('HULL '+a.hp+'%    '+score+' PTS',16,62);healthBar(16,68,112,5,a.hp,100);let compassY=small?86:28;text2(String(heading).padStart(3,'0')+'°',mx,compassY,green,'center');for(let i=-4;i<=4;i++)if(i)line(mx+i*15,compassY-5,mx+i*15,compassY-(i%2?9:13));
+text2('LEVEL '+level+'/'+campaign.length+'   /   J-10C',16,25,'#ecfff1');text2((stage+1)+'/3  '+stages[stage][0],16,44);text2('HULL '+a.hp+'%    '+score+' PTS',16,62);healthBar(16,68,112,5,a.hp,100);if(a.hp<100&&elapsed>=a.repairFrom)text2('REPAIRING',134,73,green,'left',10);let compassY=small?86:28;text2(String(heading).padStart(3,'0')+'°',mx,compassY,green,'center');for(let i=-4;i<=4;i++)if(i)line(mx+i*15,compassY-5,mx+i*15,compassY-(i%2?9:13));
 let selectedContact=active();
 if(selectedContact){
   const cue=navCue(a.p,a.h,selectedContact.p);
   let mark=mx+clamp(cue.turn,-60,60);
   ctx.strokeStyle=amber;line(mark-3,compassY+5,mark,compassY+2);line(mark,compassY+2,mark+3,compassY+5);ctx.strokeStyle=green;
 }
-let span=Math.min(W*.29,226);text2(Math.round(a.speed*3.6)+' KM/H',mx-span,my+45,green,'center');text2(Math.round(a.p[1])+' M',mx+span,my+45,green,'center');
+let span=Math.min(W*.29,226);text2(Math.round(a.speed*3.6).toLocaleString('en-US')+' KM/H',mx-span,my+45,green,'center');if(a.speed<55)text2('LOW SPEED',mx-span,my+62,amber,'center',10);text2(Math.round(a.p[1])+' M',mx+span,my+45,green,'center');
 ctx.save();ctx.translate(mx,my);ctx.rotate(a.b*.74);let py=clamp(a.pitch*83,-52,52);ctx.setLineDash([7,4]);line(-78,py,-34,py);line(34,py,78,py);ctx.restore();
 let aim=coords(add(a.p,mul(frame(a.h,a.pitch,a.b)[2],350)));if(aim[2]>0){let X=mx*(1+aim[0]/(aim[2]*zoom[0])),Y=my*(1-aim[1]/(aim[2]*zoom[1]));circle(X,Y,8);line(X-16,Y,X-7,Y);line(X+7,Y,X+16,Y);line(X,Y+7,X,Y+13)}
 let en=active();for(let e of enemies){if(e.hp<=0)continue;let [x,y,z]=coords(e.p),X=mx*(1+x/(Math.max(1,Math.abs(z))*zoom[0])),Y=my*(1-y/(Math.max(1,Math.abs(z))*zoom[1]));let on=z>1&&X>26&&X<W-26&&Y>28&&Y<H-32,selected=e===en;if(!selected&&!on)continue;ctx.strokeStyle=selected?amber:'#e9c3ad';if(on){ctx.strokeRect(X-12,Y-12,24,24);healthBar(X-20,Y+16,40,4,e.hp,e.maxHp);text2(e.hp+'/'+e.maxHp+' HP',X,Y+34,green,'center',10);
@@ -482,13 +704,14 @@ if(selected){text2(e.type.toUpperCase()+'  '+Math.round(len(sub(e.p,a.p)))+' m',
   text2(cue.course,X,Y,amber,'center',small?11:13);
   text2([e.type+' '+e.hp+'/'+e.maxHp,cue.range+' m',cue.vertical].filter(Boolean).join(' · '),X,Y+16,amber,'center',small?10:11);
 }}
-let bottom=mobile?H-135:H-27;ctx.fillStyle='#092328a8';ctx.fillRect(12,bottom-19,small?190:265,29);text2('GUN '+a.ammo+'   MSL '+a.missiles+(small?'':'   '+weapon),21,bottom);text2(cameras[camMode].toUpperCase(),W-17,bottom+2,green,'right',10);
+let bottom=mobile?H-153:H-27;const wait=Math.max(0,Math.ceil(a.flareReadyAt-elapsed));text2(wait?'FLARE  '+wait+'s':'FLARE  READY',21,bottom-25,wait?amber:green);ctx.fillStyle='#092328a8';ctx.fillRect(12,bottom-19,small?190:265,29);text2('GUN '+a.ammo+'   MSL '+a.missiles+(small?'':'   '+weapon),21,bottom);text2(cameras[camMode].toUpperCase(),W-17,bottom+2,green,'right',10);
 if(radar){let r=radar===2?Math.min(103,W*.21,H*.19):small?39:59,cx=W-r-17,cy=bottom-r-24;ctx.fillStyle='#052326bf';circle(cx,cy,r,true);ctx.strokeStyle='#a6e1c379';circle(cx,cy,r);circle(cx,cy,r*.5);line(cx-r,cy,cx+r,cy);line(cx,cy-r,cx,cy+r);line(cx,cy,cx+Math.cos(t*1.8)*r,cy+Math.sin(t*1.8)*r);text2('▲',cx,cy+3,green,'center',10);let f=frame(a.h,0,0),ally=sub(wingman,a.p),rk=r/(radar===2?2400:850);ctx.fillStyle=green;circle(cx+dot(ally,f[0])*rk,cy-dot(ally,f[2])*rk,2,true);for(let e of enemies){if(e.hp<=0)continue;let v=sub(e.p,a.p),dx=dot(v,f[0]),dz=dot(v,f[2]),k=r/Math.max(radar===2?2400:850,Math.hypot(dx,dz)*1.1);ctx.fillStyle=e===en?amber:'#efa6a0';ctx.fillRect(cx+dx*k-2,cy-dz*k-2,5,5)}}
 let warning=Number.isFinite(nearestThreat);let ahead=add(a.p,mul(frame(a.h,a.pitch,0)[2],a.speed*2.2));
 let terrainWarning=Math.min(a.p[1]-ground(a.p[0],a.p[2]),ahead[1]-ground(ahead[0],ahead[2]))<22;
 if(terrainWarning||warning||msgTime>0||lock===1){let label=terrainWarning?'LOW TERRAIN CLEARANCE · CLIMB':warning?'MISSILE INBOUND':msgTime>0?message: 'LOCKED · RIGHT CLICK / F';text2(label,mx,H*(small?.30:.22),warning?'#ffb18b':amber,'center',small?11:14)}if(camMode===2){ctx.strokeStyle='#1e3037';ctx.lineWidth=10;ctx.beginPath();ctx.ellipse(mx,H*.73,W*.55,H*.71,0,PI,TAU);ctx.stroke()}ctx.restore()}
 let slow=0,fast=0;function tick(now){let raw=last?(now-last)/1000:.016;last=now;let dt=Math.min(.12,raw);if(state==='brief'||state==='play')t+=dt;if(state==='play'){let steps=Math.ceil(dt/.018);for(let i=0;i<steps&&state==='play';i++)update(dt/steps);if(raw>.038){slow++;fast=0}else{fast++;slow=Math.max(0,slow-1)}if(slow>28&&res>.55){res=Math.max(.55,res-.12);resize();slow=0}if(fast>240&&res<1){res=Math.min(1,res+.08);resize();fast=0}}
 if(state==='brief'||state==='play'){camera(dt);render()}drawHud();requestAnimationFrame(tick)}
-if(mobile)document.querySelector('#guide div').textContent='Push the stick up to climb or sideways to turn. Release to level out. Hold Gun or Boost. Center a marked contact, then tap Missile when the lock ring fills.';reset();requestAnimationFrame(tick)
+if(mobile){$('desktopHelp').open=false;$('touchHelp').open=true;$('firstSteer').textContent='Move the left stick to steer. Release it to level out.';$('firstFire').textContent='Hold Gun for cannon fire. Keep the marked contact near the reticle until the lock ring fills, then tap Missile.'}
+reset();requestAnimationFrame(tick)
 }
 </script></html>
